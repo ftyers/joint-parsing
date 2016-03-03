@@ -1,0 +1,12 @@
+* Add more features (in particular the ones from slide 16 of 04_machine_learnning.pdf)
+   * Ideally one by one, but can be added in small groups to save time
+   * Make a table for each case
+
+* If reduce get's predicted when it's not allowed, take next best operation, not just 'shift'
+
+* Learn and classify compound labels ('la-nmod, 'ra-subj', 'sh' etc.)
+   * this would allow to extract richer features from partial trees
+
+* Use JSON to output the model
+
+* Implement averaged (multiclass) perceptron
