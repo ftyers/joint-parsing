@@ -546,7 +546,21 @@ def test_right_arc():
 # ---------------------
 # Feature extractors
 # moved to features.py
-
+def test_extract_features():
+    vector = extract_features_eng(Configuration([0, 1], [3, 4, 5],
+                                              [ROOT,
+                                               Token(1, 'The', 'the', 'DT', '_', '_', 3, '_', '_', '_'),
+                                               Token(2, 'cute', 'cute', 'JJ', '_', '_', 3, 'amod', '_', '_',),
+                                               Token(3, 'dog', 'dog', 'NN', '_', '_', 4, '_', '_', '_'),
+                                               Token(4, 'likes', 'like', 'VBZ', '_', '_', 0, '_', '_', '_'),
+                                               Token(5, 'apples', 'apple', 'NNS', '_', '_', 4, '_', '_', '_')],
+                                              {Arc(3, 'amod', 2)}))
+    assert vector == \
+           ['bias', 'b0.form=dog', 'b0.pos=NN', 's0.form=The', 's0.pos=DT',
+            'b1.pos=VBZ', 's1.pos=ROOT', 'ld(b0).pos=JJ',
+            's0.pos b0.pos=DT NN', 's0.pos b0.form=DT dog', 's0.form b0.pos=The NN', 's0.form b0.form=The dog',
+            's0.lemma=the', 'b0.lemma=dog', 'b1.form=likes', 'b2.pos=NNS', 'b3.pos=None',
+            'rd(s0).deprel=None', 'ld(s0).deprel=None', 'rd(b0).deprel=amod', 'ld(b0).deprel=amod']
 
 # ---------------------
 # Helper functions

@@ -1,6 +1,4 @@
 # move feature extractor to a separate module
-from sdp import Token, ROOT, Configuration, Arc
-
 
 # Configuration -> FeatureVector
 def extract_features_eng(c):
@@ -97,7 +95,7 @@ def extract_features_eng(c):
         except IndexError:
             return 'None'
 
-    def deprel_rdep_stk0():
+    def deprel_rdep_stk0():  # todo can the rightmost dependency be on the left?
         try:
             feature = c.sentence[max(
                 {arc for arc in c.arcs if arc.h == c.stack[-1]}, key=lambda arc: arc.d).d].deprel
@@ -152,17 +150,4 @@ def extract_features_eng(c):
             'ld(b0).deprel=' + deprel_ldep_buf0()
             ]
 
-
-def test_extract_features():
-    assert extract_features_eng(Configuration([0, 1], [3, 4, 5],
-                                              [ROOT,
-                                               Token(1, 'The', 'the', 'DT', '_', '_', 3, '_', '_', '_'),
-                                               Token(2, 'cute', 'cute', 'JJ', '_', '_', 2, '_', '_', '_',),
-                                               Token(3, 'dog', 'dog', 'NN', '_', '_', 4, '_', '_', '_'),
-                                               Token(4, 'likes', 'like', 'VBZ', '_', '_', 0, '_', '_', '_'),
-                                               Token(5, 'apples', 'apple', 'NNS', '_', '_', 4, '_', '_', '_')],
-                                              {Arc(3, '_', 2)})) ==\
-           ['bias', 'b0.form=dog', 'b0.pos=NN', 's0.form=The', 's0.pos=DT',
-            'b1.pos=VBZ', 's1.pos=ROOT', 'ld(b0).pos=JJ',
-            's0.pos b0.pos=DT NN', 's0.pos b0.form=DT dog', 's0.form b0.pos=The NN', 's0.form b0.form=The dog']
-
+# fixme perhaps a better test case
