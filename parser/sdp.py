@@ -7,6 +7,8 @@ from collections import namedtuple
 import sys
 import copy
 
+from features import extract_features_eng
+
 ## (ArcStandard Transition-based) Statistical Dependency Parser.
 ##
 ## INPUT: a file with to-be-parsed sentences in CoNLL06 format.
@@ -294,7 +296,7 @@ def train(train_conll):
     training_collection = []
     for s, fvecs_labels in generate_training_data(train_conll):
         training_collection.extend(fvecs_labels)
-    dev_sents = list(read_sentences('../data/german/dev/tiger-2.2.dev.conll06.gold'))
+    dev_sents = list(read_sentences('data/en-ud-dev.conllu'))  # fixme but why hardcode?
 
     classifier = classifiers.MulticlassPerceptron(['sh', 'ra', 'la'])
     best_classifier = copy.deepcopy(classifier)
@@ -302,7 +304,7 @@ def train(train_conll):
     uas_after = 0.0
     iter = 0
 
-    while iter < 15:
+    while iter < 15:  # fixme hardcoded number of iterations
         uas_before = uas_after
         classifier.train_one_iteration(training_collection)
         uas_after = micro_uas([(c2s(parse(s, lambda c: Transition(classifier.classify(extract_features_eng(c)), '_'))),
@@ -533,98 +535,7 @@ def test_right_arc():
 
 ## ---------------------
 ## Feature extractors
-
-
-## Configuration -> FeatureVector
-def extract_features_eng(c):
-    """Represent configuration as a feature vector to be consumed by a classifier
-    (using feature templates from page 32 of 06_howto_implement.pdf and slide 16 of
-    04_machine_learnning.pdf)
-    """
-
-    def form_of_buffer_front():
-        return c.sentence[c.buffer[0]].form
-
-    def pos_of_buffer_front():
-        return c.sentence[c.buffer[0]].cpostag
-
-    def form_of_stack_top():
-        try:
-            return c.sentence[c.stack[-1]].form
-        except IndexError:
-            return 'None'
-
-    def pos_of_stack_top():
-        try:
-            return c.sentence[c.stack[-1]].cpostag
-        except IndexError:
-            return 'None'
-
-    def pos_of_second_buffer_item():
-        try:
-            return c.sentence[c.buffer[1]].cpostag
-        except IndexError:
-            return 'None'
-
-    def pos_of_second_stack_item():
-        try:
-            return c.sentence[c.stack[-2]].cpostag
-        except IndexError:
-            return 'None'
-
-    def pos_of_leftmost_dep_of_buffer_front():
-        try:
-            feature = c.sentence[min({arc for arc in c.arcs if arc.h == c.buffer[0]}, key=lambda arc: arc.d).d].cpostag
-        except ValueError:
-            feature = 'None'
-        return feature
-
-    def pos_of_stack_top_and_pos_of_buffer_front():
-        try:
-            return pos_of_stack_top() + ' ' + pos_of_buffer_front()
-        except IndexError:
-            return 'None'
-
-    def pos_of_stack_top_and_form_of_buffer_front():
-        try:
-            return pos_of_stack_top() + ' ' + form_of_buffer_front()
-        except IndexError:
-            return 'None'
-
-    def form_of_stack_top_and_pos_of_buffer_front():
-        try:
-            return form_of_stack_top() + ' ' + pos_of_buffer_front()
-        except IndexError:
-            return 'None'
-
-    def form_of_stack_top_and_form_of_buffer_front():
-        try:
-            return form_of_stack_top() + ' ' + form_of_buffer_front()
-        except IndexError:
-            return 'None'
-
-    return ['bias',
-            'b0.form=' + form_of_buffer_front(), 'b0.pos=' + pos_of_buffer_front(),
-            's0.form=' + form_of_stack_top(), 's0.pos=' + pos_of_stack_top(),
-            'b1.pos=' + pos_of_second_buffer_item(), 's1.pos=' + pos_of_second_stack_item(),
-            'ld(b0).pos=' + pos_of_leftmost_dep_of_buffer_front(),
-            's0.pos b0.pos=' + pos_of_stack_top_and_pos_of_buffer_front(),
-            's0.pos b0.form=' + pos_of_stack_top_and_form_of_buffer_front(),
-            's0.form b0.pos=' + form_of_stack_top_and_pos_of_buffer_front(),
-            's0.form b0.form=' + form_of_stack_top_and_form_of_buffer_front()]
-
-def test_extract_features():
-    assert extract_features_eng(Configuration([0, 1], [3, 4, 5],
-                                              [ROOT,
-                                               Token(1, 'The', 'the', 'DT', '_', '_', 3, '_', '_', '_'),
-                                               Token(2, 'cute', 'cute', 'JJ', '_', '_', 2, '_', '_', '_',),
-                                               Token(3, 'dog', 'dog', 'NN', '_', '_', 4, '_', '_', '_'),
-                                               Token(4, 'likes', 'like', 'VBZ', '_', '_', 0, '_', '_', '_'),
-                                               Token(5, 'apples', 'apple', 'NNS', '_', '_', 4, '_', '_', '_')],
-                                              {Arc(3, '_', 2)})) ==\
-           ['bias', 'b0.form=dog', 'b0.pos=NN', 's0.form=The', 's0.pos=DT',
-            'b1.pos=VBZ', 's1.pos=ROOT', 'ld(b0).pos=JJ',
-            's0.pos b0.pos=DT NN', 's0.pos b0.form=DT dog', 's0.form b0.pos=The NN', 's0.form b0.form=The dog']
+## moved to features.py
 
 
 ## ---------------------
