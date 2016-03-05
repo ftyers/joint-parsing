@@ -72,7 +72,10 @@ def extract_features_eng(c):
 
     # extra features from Kuebler's book
     def lemma_stk0():
-        return c.sentence[c.stack[-1]].lemma
+        try:
+            return c.sentence[c.stack[-1]].lemma
+        except IndexError:
+            return 'None'
 
     def lemma_buf0():
         return c.sentence[c.buffer[0]].lemma
@@ -101,6 +104,8 @@ def extract_features_eng(c):
                 {arc for arc in c.arcs if arc.h == c.stack[-1]}, key=lambda arc: arc.d).d].deprel
         except ValueError:
             feature = 'None'
+        except IndexError:
+            feature = 'None'
         return feature
 
     def deprel_rdep_buf0():
@@ -116,6 +121,8 @@ def extract_features_eng(c):
             feature = c.sentence[min(
                 {arc for arc in c.arcs if arc.h == c.stack[-1]}, key=lambda arc: arc.d).d].deprel
         except ValueError:
+            feature = 'None'
+        except IndexError:
             feature = 'None'
         return feature
 
