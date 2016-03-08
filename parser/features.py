@@ -1,10 +1,13 @@
 # move feature extractor to a separate module
 
 # Configuration -> FeatureVector
-def extract_features_eng(c):
+def extract_features_eng(c, as_dict=False):
     """Represent configuration as a feature vector to be consumed by a classifier
     (using feature templates from page 32 of 06_howto_implement.pdf and slide 16 of
     04_machine_learnning.pdf)
+    :param c: configuration from which to extract features
+    :param as_dict: indicates whether the output should be a dictionary (to be
+    consumed by DictVectorizer) or a list of 'feature_name=value'.
     """
     # todo I'd rather have them as objects and properties. not essential though
     # will comply with the format for now
@@ -134,27 +137,53 @@ def extract_features_eng(c):
             feature = 'None'
         return feature
 
-
-    # todo put them into the vector. check if it breaks
-
-    return ['bias',  # bias what?
-            'b0.form=' + form_of_buffer_front(), 'b0.pos=' + pos_of_buffer_front(),
-            's0.form=' + form_of_stack_top(), 's0.pos=' + pos_of_stack_top(),
-            'b1.pos=' + pos_of_second_buffer_item(), 's1.pos=' + pos_of_second_stack_item(),
-            'ld(b0).pos=' + pos_of_leftmost_dep_of_buffer_front(),
-            's0.pos b0.pos=' + pos_of_stack_top_and_pos_of_buffer_front(),
-            's0.pos b0.form=' + pos_of_stack_top_and_form_of_buffer_front(),
-            's0.form b0.pos=' + form_of_stack_top_and_pos_of_buffer_front(),
-            's0.form b0.form=' + form_of_stack_top_and_form_of_buffer_front(),
-            's0.lemma=' + lemma_stk0(),  # new features start
-            'b0.lemma=' + lemma_buf0(),
-            'b1.form=' + form_buf1(),
-            'b2.pos=' + pos_buf2(),
-            'b3.pos=' + pos_buf3(),
-            'rd(s0).deprel=' + deprel_rdep_stk0(),
-            'ld(s0).deprel=' + deprel_ldep_stk0(),
-            'rd(b0).deprel=' + deprel_rdep_buf0(),
-            'ld(b0).deprel=' + deprel_ldep_buf0()
-            ]
+    if as_dict:
+        return ['bias',  # bias what?
+                'b0.form=' + form_of_buffer_front(), 'b0.pos=' + pos_of_buffer_front(),
+                's0.form=' + form_of_stack_top(), 's0.pos=' + pos_of_stack_top(),
+                'b1.pos=' + pos_of_second_buffer_item(), 's1.pos=' + pos_of_second_stack_item(),
+                'ld(b0).pos=' + pos_of_leftmost_dep_of_buffer_front(),
+                's0.pos b0.pos=' + pos_of_stack_top_and_pos_of_buffer_front(),
+                's0.pos b0.form=' + pos_of_stack_top_and_form_of_buffer_front(),
+                's0.form b0.pos=' + form_of_stack_top_and_pos_of_buffer_front(),
+                's0.form b0.form=' + form_of_stack_top_and_form_of_buffer_front(),
+                's0.lemma=' + lemma_stk0(),  # new features start
+                'b0.lemma=' + lemma_buf0(),
+                'b1.form=' + form_buf1(),
+                'b2.pos=' + pos_buf2(),
+                'b3.pos=' + pos_buf3(),
+                'rd(s0).deprel=' + deprel_rdep_stk0(),
+                'ld(s0).deprel=' + deprel_ldep_stk0(),
+                'rd(b0).deprel=' + deprel_rdep_buf0(),
+                'ld(b0).deprel=' + deprel_ldep_buf0()
+                ]
+    else:
+        return dict(zip(
+            ('b0.form', 'b0.pos', 's0.form', 's0.pos', 'b1.pos', 's1.pos', 'ld(b0).pos',
+             's0.pos b0.pos', 's0.pos b0.form', 's0.form b0.pos', 's0.form b0.form',
+             's0.lemma', 'b0.lemma', 'b1.form', 'b2.pos', 'b3.pos', 'rd(s0).deprel',
+             'ld(s0).deprel', 'rd(b0).deprel', 'ld(b0).deprel'),
+            (
+                form_of_buffer_front(),
+                pos_of_buffer_front(),
+                form_of_stack_top(),
+                pos_of_stack_top(),
+                pos_of_second_buffer_item(),
+                pos_of_second_stack_item(),
+                pos_of_leftmost_dep_of_buffer_front(),
+                pos_of_stack_top_and_form_of_buffer_front(),
+                form_of_stack_top_and_pos_of_buffer_front(),
+                form_of_stack_top_and_form_of_buffer_front(),
+                lemma_stk0(),
+                lemma_buf0(),
+                form_buf1(),
+                pos_buf2(),
+                pos_buf3(),
+                deprel_rdep_stk0(),
+                deprel_ldep_stk0(),
+                deprel_rdep_buf0(),
+                deprel_ldep_buf0()
+            )
+        ))
 
 # fixme perhaps a better test case
