@@ -137,7 +137,7 @@ def extract_features_eng(c, as_dict=False):
             feature = 'None'
         return feature
 
-    if as_dict:
+    if not as_dict:
         return ['bias',  # bias what?
                 'b0.form=' + form_of_buffer_front(), 'b0.pos=' + pos_of_buffer_front(),
                 's0.form=' + form_of_stack_top(), 's0.pos=' + pos_of_stack_top(),
