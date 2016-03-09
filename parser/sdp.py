@@ -4,8 +4,17 @@
 import classifiers
 from collections import namedtuple
 import sys
+import os
 import copy
+import numpy
 from features import extract_features_eng
+
+from sklearn.linear_model import SGDClassifier
+from sklearn.feature_extraction import DictVectorizer
+
+from sklearn.metrics import classification_report
+from sklearn.externals import joblib
+from sklearn import grid_search
 
 # (ArcStandard Transition-based) Statistical Dependency Parser.
 #
@@ -18,7 +27,9 @@ from features import extract_features_eng
 # ASSUMES: 'id' fields of tokens in a sentence start counting
 #          from 1 and are convertible to integers.
 #
-# USAGE: python3 sdp.py <training_file> <input_file> <output_file>
+# USAGE: python3 sdp.py <training_file> <development_file> <input_file> <output_file>
+#  fixme changed signature silently, all tests will fail
+# todo make everything into options instead, and parse options with a real cli parser
 #        (also see acceptance-tests/T_* folders for different modes)
 # UNIT TESTS: py.test sdp.py (py.test has to be installed)
 
@@ -171,7 +182,7 @@ TR_2 = Transition('la', '_')  # unlabeled left arc transition
 TR_3 = Transition('la', 'subj')  # labeled left arc transition
 TR_4 = Transition('ra', '_')  # unlabeled right arc transition
 TR_5 = Transition('ra', 'nmod')  # labeled right arc transition
-
+# todo understand where transition gets a label
 """
 def fn_for_transition(tr):
     if tr.op == 'sh':
@@ -229,7 +240,7 @@ def test_parse():
 
 
 # Filename -> (generator (tupleof Sentence, (listof (tupleof FeatureVector, String))))
-def generate_training_data(train_conll):
+def generate_training_data(train_conll, as_dict=False):
     """Generate sentence and a list of (feature vector, expected label) tuples (representing
     configuration and correct transition operation) out of the training sentences.
     """
@@ -238,7 +249,7 @@ def generate_training_data(train_conll):
         fvecs_and_labels = []
         while c.buffer:
             tr = oracle(c)
-            fvecs_and_labels.append((extract_features_eng(c), tr.op))
+            fvecs_and_labels.append((extract_features_eng(c, as_dict), tr.op))
             if tr.op == 'sh':
                 c = shift(c)
             elif tr.op == 'la':
@@ -289,7 +300,7 @@ def test_generate_training_data(tmpdir):
 
 
 # Filename -> Function
-def train(train_conll):
+def train_internal_classifier(train_conll):
     """Train a classifier on gold standard sentences and return a guide function
     which predicts transitions for given configurations using that classifier.
     """
@@ -324,7 +335,84 @@ def train(train_conll):
 
     return guide
 
+def train(training_path, development_path):
+    """Train a classifier on gold standard sentences and return a guide function
+    which predicts transitions for given configurations using that classifier.
+    :param training_path: path to training file in CONLL06 format
+    :param development_path: path to development file in CONLL06 format
+    """
+    training_collection = []    # a list of dicts containing features
+    labels = []                 # a list of target transition labels
+    development_collection = [] # do I need features for these? um, yes.
+    dev_labels = []
 
+    for s, fvecs_labels in generate_training_data(training_path, as_dict=True):
+        for item in fvecs_labels:
+            training_collection.append(item[0])
+            labels.append(item[-1])  # todo test this, not sure if correct
+
+    for s, fvecs_labels in generate_training_data(development_path, as_dict=True):
+
+        for item in fvecs_labels:
+            development_collection.append(item[0])
+            dev_labels.append(item[-1])
+
+    # transform string features via one-hot encoding
+    vec = DictVectorizer()
+    data = vec.fit_transform(training_collection)
+    target = numpy.array(labels)
+    data_test = vec.transform(development_collection)
+    target_test = numpy.array(dev_labels)
+
+    # set parameters for grid search
+    tuned_parameters = [{'loss': ['hinge', 'log'], 'shuffle': [True],
+                         'learning_rate': ['constant'], 'eta0': [2**(-8)], 'average': [True, False],
+                         'penalty': ['l1', 'l2', 'elasticnet'],
+                         'alpha': [0.001, 0.0001, 0.00001, 0.000001]}]
+
+    scores = ['precision', 'recall']
+
+    # todo credit Elya on this code
+    for score in scores:
+        print("# Tuning hyper-parameters for %s" % score)
+        print()
+
+        clf = grid_search.GridSearchCV(SGDClassifier(), tuned_parameters, cv=5,
+                           scoring='%s_weighted' % score, verbose=2)
+        clf.fit(data, target)
+
+        print("Best parameters set found on development set:")
+        print()
+        print(clf.best_params_)
+        print()
+        print("Grid scores on development set:")
+        print()
+        for params, mean_score, scores in clf.grid_scores_:
+            print("%0.3f (+/-%0.03f) for %r"
+                  % (mean_score, scores.std() * 2, params))
+        print()
+
+        print("Detailed classification report:")
+        print()
+        print("The model is trained on the full development set.")
+        print("The scores are computed on the full evaluation set.")
+        print()
+        y_true, y_pred = target_test, clf.predict(data_test)
+        print(classification_report(y_true, y_pred))
+        best = clf.best_estimator_
+        print(clf.best_score_)
+
+        joblib.dump(best, 'best model for %s.pkl' % (os.path.basename(training_path)))
+        print()
+
+
+    # Configuration -> Transition
+    def guide(c):
+        vector = vec.transform(extract_features_eng(c, as_dict=True))
+        return Transition(best.predict(vector), '_')  # fixme shouldn't it assign a label?
+    return guide
+
+# todo evaluate uas instead of precision/recall
 # -----------------
 # Evaluation
 
@@ -729,8 +817,8 @@ def test_read_token():
 
 
 if __name__ == '__main__':
-    guide_function = train(sys.argv[1])
-    with open(sys.argv[3], 'w') as output_file:
-        for s in read_sentences(sys.argv[2]):
+    guide_function = train(sys.argv[1], sys.argv[2])
+    with open(sys.argv[4], 'w') as output_file:
+        for s in read_sentences(sys.argv[3]):
             final_config = parse(s, guide_function)
             output_file.write(s2conll(c2s(final_config)) + '\n')
