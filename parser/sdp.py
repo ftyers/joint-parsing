@@ -28,6 +28,7 @@ from sklearn import grid_search
 #          from 1 and are convertible to integers.
 #
 # USAGE: python3 sdp.py <training_file> <development_file> <input_file> <output_file>
+# <path_to_model> <path_to_vectorizer>
 #  fixme changed signature silently, all tests will fail
 # todo make everything into options instead, and parse options with a real cli parser
 #        (also see acceptance-tests/T_* folders for different modes)
@@ -335,6 +336,7 @@ def train_internal_classifier(train_conll):
 
     return guide
 
+
 def train(training_path, development_path):
     """Train a classifier on gold standard sentences and return a guide function
     which predicts transitions for given configurations using that classifier.
@@ -372,7 +374,6 @@ def train(training_path, development_path):
 
     scores = ['precision', 'recall']
 
-    # todo credit Elya on this code
     for score in scores:
         print("# Tuning hyper-parameters for %s" % score)
         print()
@@ -405,6 +406,7 @@ def train(training_path, development_path):
         joblib.dump(best, 'best model for %s.pkl' % (os.path.basename(training_path)))
         print()
 
+    joblib.dump(vec, 'vectorizer for %s.pkl' % (os.path.basename(training_path)))
 
     # Configuration -> Transition
     def guide(c):
@@ -412,7 +414,23 @@ def train(training_path, development_path):
         return Transition(best.predict(vector), '_')  # fixme shouldn't it assign a label?
     return guide
 
-# todo evaluate uas instead of precision/recall
+
+def load_model(clf_path, vec_path):
+    """
+    Load a pre-trained model instead of training a new one.
+    Model and vectorizer files are saved during training.
+    :param clf_path: path to .pkl model file
+    :param vec_path: path to vectorizer file
+    """
+    clf = joblib.load(clf_path)
+    vec = joblib.load(vec_path)
+
+    def guide(c):
+        vector = vec.transform(extract_features_eng(c, as_dict=True))
+        return Transition(clf.predict(vector), '_')  # fixme shouldn't it assign a label?
+
+    return guide
+
 # -----------------
 # Evaluation
 
@@ -421,8 +439,8 @@ def train(training_path, development_path):
 def macro_uas(pred_gold):
     """Given a list of predicted and gold standard sentences, return macro-averaged unlabeled attachment score."""
     return sum(
-        [nbr_of_tokens_with_correct_head(s_pred, s_gold) / len(s_pred) for s_pred, s_gold in pred_gold]) / len(
-        sentences)
+        [nbr_of_tokens_with_correct_head(s_pred, s_gold) / len(s_pred) for s_pred, s_gold in pred_gold]) / \
+           len(sentences)
 
 
 # (listof (Sentence, Sentence)) -> Float
@@ -793,7 +811,10 @@ def test_read_sentences(tmpdir):
 # Strting -> Token
 def read_token(line):
     """Parse a line of the file in CoNLL06 format and return a Token."""
-    id, form, lemma, cpostag, postag, feats, head, deprel, phead, pdeprel = line.strip().split('\t')
+    token = line.strip().split('\t')
+    if len(token) == 6:
+        token += ['_', '_', '_', '_']
+    id, form, lemma, cpostag, postag, feats, head, deprel, phead, pdeprel = token
     try:
         head = int(head)
     except ValueError:
@@ -817,8 +838,15 @@ def test_read_token():
 
 
 if __name__ == '__main__':
-    guide_function = train(sys.argv[1], sys.argv[2])
-    with open(sys.argv[4], 'w') as output_file:
+
+    try:
+        model_path = sys.argv[5]
+        vec_path = sys.argv[6]
+        guide_function = load_model(model_path, vec_path)
+    except IndexError:
+        guide_function = train(sys.argv[1], sys.argv[2])
+    cwd = os.getcwd()
+    with open(os.path.join(cwd, sys.argv[4]), 'w') as output_file:
         for s in read_sentences(sys.argv[3]):
             final_config = parse(s, guide_function)
             output_file.write(s2conll(c2s(final_config)) + '\n')
