@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import argparse
 
 import classifiers
 from collections import namedtuple
@@ -16,24 +17,23 @@ from sklearn.metrics import classification_report
 from sklearn.externals import joblib
 from sklearn import grid_search
 
-# (ArcStandard Transition-based) Statistical Dependency Parser.
-#
-# INPUT: a file with to-be-parsed sentences in CoNLL06 format.
-# OUTPUT: a file with parsed sentences in CoNLL06 format.
-#
-# Replaces 'head' and 'deprel' fields of input tokens with
-# predicted head and label when writing them to output file.
-#
-# ASSUMES: 'id' fields of tokens in a sentence start counting
-#          from 1 and are convertible to integers.
-#
-# USAGE: python3 sdp.py <training_file> <development_file> <input_file> <output_file>
-# <path_to_model> <path_to_vectorizer>
-#  fixme changed signature silently, all tests will fail
-# todo make everything into options instead, and parse options with a real cli parser
-#        (also see acceptance-tests/T_* folders for different modes)
-# UNIT TESTS: py.test sdp.py (py.test has to be installed)
+description = """(ArcStandard Transition-based) Statistical Dependency Parser.
 
+INPUT: a file with to-be-parsed sentences in CoNLL06 format.
+OUTPUT: a file with parsed sentences in CoNLL06 format.
+
+Replaces 'head' and 'deprel' fields of input tokens with
+predicted head and label when writing them to output file.
+
+ASSUMES: 'id' fields of tokens in a sentence start counting
+         from 1 and are convertible to integers.
+
+USAGE: python3 sdp.py <training_file> <development_file> <input_file> <output_file>
+<path_to_model> <path_to_vectorizer>
+(also see acceptance-tests/T_* folders for different modes)
+UNIT TESTS: py.test sdp.py (py.test has to be installed)"""
+
+# fixme changed signature silently, all tests will fail
 
 # =================
 # Constants:
@@ -411,7 +411,7 @@ def train(training_path, development_path):
     # Configuration -> Transition
     def guide(c):
         vector = vec.transform(extract_features_eng(c, as_dict=True))
-        return Transition(best.predict(vector), '_')  # fixme shouldn't it assign a label?
+        return Transition(best.predict(vector), '_')  # fixme this should assign a dependency label
     return guide
 
 
@@ -427,7 +427,7 @@ def load_model(clf_path, vec_path):
 
     def guide(c):
         vector = vec.transform(extract_features_eng(c, as_dict=True))
-        return Transition(clf.predict(vector), '_')  # fixme shouldn't it assign a label?
+        return Transition(clf.predict(vector), '_')
 
     return guide
 
@@ -838,15 +838,50 @@ def test_read_token():
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=description)
 
-    try:
-        model_path = sys.argv[5]
-        vec_path = sys.argv[6]
+    parser.add_argument('-t', '--train')
+    parser.add_argument('-dev', '--development')
+    parser.add_argument('input_file')
+    parser.add_argument('output_file')
+    parser.add_argument('-m', '--model')
+    parser.add_argument('-vec', '--vectorizer')
+
+    args = parser.parse_args()
+
+    # resolve argument pairs
+    if args.train and args.development:
+        if args.model and args.vectorizer:
+            raise argparse.ArgumentError(args.train,
+                                         "Please provide either training and development sets, or a pre-trained model and a vectorizer, but not both.")
+
+    elif args.train:
+        raise argparse.ArgumentError(args.development, "Please provide a development set in addition to the training set.")
+
+    elif args.development:
+        raise argparse.ArgumentError(args.train, "Please provide a training set in addition to the development set.")
+
+    elif args.model and args.vectorizer:
+        pass
+
+    elif args.model:
+        raise argparse.ArgumentError(args.vectorizer, "Please provide a vectorizer generated during training.")
+
+    elif args.vectorizer:
+        raise argparse.ArgumentError(args.model, "Please provide a training model with the vectorizer.")
+
+    # get guide function
+    if args.model and args.vectorizer:
+        model_path = args.model
+        vec_path = args.vectorizer
         guide_function = load_model(model_path, vec_path)
-    except IndexError:
-        guide_function = train(sys.argv[1], sys.argv[2])
+
+    else:
+        guide_function = train(args.train, args.development)
+
+    # parse input file
     cwd = os.getcwd()
-    with open(os.path.join(cwd, sys.argv[4]), 'w') as output_file:
-        for s in read_sentences(sys.argv[3]):
+    with open(os.path.join(cwd, args.output), 'w') as output_file:
+        for s in read_sentences(args.input):
             final_config = parse(s, guide_function)
             output_file.write(s2conll(c2s(final_config)) + '\n')
