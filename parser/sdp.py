@@ -183,7 +183,6 @@ TR_2 = Transition('la', '_')  # unlabeled left arc transition
 TR_3 = Transition('la', 'subj')  # labeled left arc transition
 TR_4 = Transition('ra', '_')  # unlabeled right arc transition
 TR_5 = Transition('ra', 'nmod')  # labeled right arc transition
-# todo understand where transition gets a label
 """
 def fn_for_transition(tr):
     if tr.op == 'sh':
@@ -403,10 +402,10 @@ def train(training_path, development_path):
         best = clf.best_estimator_
         print(clf.best_score_)
 
-        joblib.dump(best, 'best model for %s.pkl' % (os.path.basename(training_path)))
+        joblib.dump(best, 'best_model_for_%s.pkl' % (os.path.basename(training_path)))
         print()
 
-    joblib.dump(vec, 'vectorizer for %s.pkl' % (os.path.basename(training_path)))
+    joblib.dump(vec, 'vectorizer_for_%s.pkl' % (os.path.basename(training_path)))
 
     # Configuration -> Transition
     def guide(c):
@@ -702,6 +701,7 @@ def c2s(c):
     TODO ASSUME: - tree represented by c.arcs is a valid tree (each token
                    in c.sentence was assigned a head)
     """
+    # fixme well it doesn't always get a head...
 
     # (setof Arc) -> (dictionaryof Integer:(tupleof Integer, String)
     def invert_arcs(arcs):
@@ -715,7 +715,9 @@ def c2s(c):
         try:
             pred_head = d2h_l[t.id][0]
         except KeyError:
-            pred_head = "_"
+            # pred_head = "_"
+            pred_head = 0  # fixme this is a dumb fix to make MaltParser happy in the few cases
+                           # make it a real fix
         return pred_head
 
     # Token -> String
@@ -836,16 +838,24 @@ def test_read_token():
 # ---------------------
 # Runner
 
+class AbsPath(argparse.Action):
+
+    def __call__(self, parser, namespace, path, option_string=None):
+        cwd = os.getcwd()
+        # cwd = os.path.dirname(os.path.realpath(__file__))  # use for debugging and config launches
+        if not os.path.isabs(path):
+            path = os.path.join(cwd, path)
+        setattr(namespace, self.dest, path)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=description)
 
-    parser.add_argument('-t', '--train')
-    parser.add_argument('-dev', '--development')
-    parser.add_argument('input_file')
-    parser.add_argument('output_file')
-    parser.add_argument('-m', '--model')
-    parser.add_argument('-vec', '--vectorizer')
+    parser.add_argument('-t', '--train', action=AbsPath)
+    parser.add_argument('-dev', '--development', action=AbsPath)
+    parser.add_argument('input_file', action=AbsPath)
+    parser.add_argument('output_file', action=AbsPath)
+    parser.add_argument('-m', '--model', action=AbsPath)
+    parser.add_argument('-vec', '--vectorizer', action=AbsPath)
 
     args = parser.parse_args()
 
@@ -881,7 +891,7 @@ if __name__ == '__main__':
 
     # parse input file
     cwd = os.getcwd()
-    with open(os.path.join(cwd, args.output), 'w') as output_file:
-        for s in read_sentences(args.input):
+    with open(os.path.join(cwd, args.output_file), 'w') as output_file:
+        for s in read_sentences(args.input_file):
             final_config = parse(s, guide_function)
             output_file.write(s2conll(c2s(final_config)) + '\n')
