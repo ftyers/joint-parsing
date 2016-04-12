@@ -249,7 +249,7 @@ def generate_training_data(train_conll, as_dict=False):
         fvecs_and_labels = []
         while c.buffer:
             tr = oracle(c)
-            fvecs_and_labels.append((extract_features_eng(c, as_dict), tr.op))
+            fvecs_and_labels.append((extract_features_eng(c, as_dict), tr.op+'_'+tr.l))
             if tr.op == 'sh':
                 c = shift(c)
             elif tr.op == 'la':
@@ -350,7 +350,7 @@ def train(training_path, development_path):
     for s, fvecs_labels in generate_training_data(training_path, as_dict=True):
         for item in fvecs_labels:
             training_collection.append(item[0])
-            labels.append(item[-1])  # todo test this, not sure if correct
+            labels.append(item[-1])
 
     for s, fvecs_labels in generate_training_data(development_path, as_dict=True):
 
@@ -370,6 +370,12 @@ def train(training_path, development_path):
                          'learning_rate': ['constant'], 'eta0': [2**(-8)], 'average': [True, False],
                          'penalty': ['l1', 'l2', 'elasticnet'],
                          'alpha': [0.001, 0.0001, 0.00001, 0.000001]}]
+
+    # a smaller grid for testing
+    # tuned_parameters = [{'loss': ['hinge'], 'shuffle': [True],
+    #                      'learning_rate': ['constant'], 'eta0': [2**(-8)], 'average': [True, False],
+    #                      'penalty': ['l1', 'l2', 'elasticnet'],
+    #                      'alpha': [0.000001]}]
 
     scores = ['precision', 'recall']
 
@@ -410,7 +416,13 @@ def train(training_path, development_path):
     # Configuration -> Transition
     def guide(c):
         vector = vec.transform(extract_features_eng(c, as_dict=True))
-        return Transition(best.predict(vector), '_')  # fixme this should assign a dependency label
+        try:
+            transition, label = clf.predict(vector)[0].split('_')
+        except ValueError:
+            transition = clf.predict(vector)[0].split('_')[0]
+            label = '_'
+        return Transition(transition, label)
+
     return guide
 
 
@@ -426,7 +438,12 @@ def load_model(clf_path, vec_path):
 
     def guide(c):
         vector = vec.transform(extract_features_eng(c, as_dict=True))
-        return Transition(clf.predict(vector), '_')
+        try:
+            transition, label = clf.predict(vector)[0].split('_')
+        except ValueError:
+            transition = clf.predict(vector)[0].split('_')[0]
+            label = '_'
+        return Transition(transition, label)
 
     return guide
 
