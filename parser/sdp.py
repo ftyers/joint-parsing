@@ -9,6 +9,7 @@ import os
 import copy
 import numpy
 from features import extract_features_eng
+from metrics import *
 
 from sklearn.linear_model import SGDClassifier
 from sklearn.feature_extraction import DictVectorizer
@@ -366,16 +367,16 @@ def train(training_path, development_path):
     target_test = numpy.array(dev_labels)
 
     # set parameters for grid search
-    tuned_parameters = [{'loss': ['hinge', 'log'], 'shuffle': [True],
-                         'learning_rate': ['constant'], 'eta0': [2**(-8)], 'average': [True, False],
-                         'penalty': ['l1', 'l2', 'elasticnet'],
-                         'alpha': [0.001, 0.0001, 0.00001, 0.000001]}]
-
-    # a smaller grid for testing
-    # tuned_parameters = [{'loss': ['hinge'], 'shuffle': [True],
+    # tuned_parameters = [{'loss': ['hinge', 'log'], 'shuffle': [True],
     #                      'learning_rate': ['constant'], 'eta0': [2**(-8)], 'average': [True, False],
     #                      'penalty': ['l1', 'l2', 'elasticnet'],
-    #                      'alpha': [0.000001]}]
+    #                      'alpha': [0.001, 0.0001, 0.00001, 0.000001]}]
+
+    # smaller set
+    tuned_parameters = [{'loss': ['hinge'], 'shuffle': [True],
+                         'learning_rate': ['constant'], 'eta0': [2**(-8)], 'average': [True, False],
+                         'penalty': ['l1', 'l2', 'elasticnet'],
+                         'alpha': [0.000001]}]
 
     scores = ['precision', 'recall']
 
@@ -446,58 +447,6 @@ def load_model(clf_path, vec_path):
         return Transition(transition, label)
 
     return guide
-
-# -----------------
-# Evaluation
-
-
-# (listof (Sentence, Sentence)) -> Float
-def macro_uas(pred_gold):
-    """Given a list of predicted and gold standard sentences, return macro-averaged unlabeled attachment score."""
-    return sum(
-        [nbr_of_tokens_with_correct_head(s_pred, s_gold) / len(s_pred) for s_pred, s_gold in pred_gold]) / \
-           len(sentences)
-
-
-# (listof (Sentence, Sentence)) -> Float
-def micro_uas(pred_gold):
-    """Given a list of predicted and gold standard sentences, return micro-averaged unlabeled attachment score."""
-    all_tokens = 0
-    correct = 0
-    for s_pred, s_gold in pred_gold:
-        all_tokens += len(s_pred)
-        correct += nbr_of_tokens_with_correct_head(s_pred, s_gold)
-    return correct / all_tokens
-
-
-# Configuration -> Float
-def uas(c):
-    """Return Unlabeled Attachment Score for the predicted parse tree
-    represented by the given final configuration."""
-
-    return nbr_of_tokens_with_correct_head(c2s(c), c.sentence[1:]) / len(c.sentence[1:])
-
-
-def test_uas():
-    assert abs(uas(Configuration([0, 1, 2, 3, 4, 5, 6, 7], [],
-                                 [ROOT,
-                                  Token(1, 'John', '_', '_', '_', '_', 2, 'subj', '_', '_'),
-                                  Token(2, 'meets', '_', '_', '_', '_', 0, 'root', '_', '_', ),
-                                  Token(3, 'Mary', '_', '_', '_', '_', 2, 'obj', '_', '_'),
-                                  Token(4, 'at', '_', '_', '_', '_', 2, 'adv', '_', '_'),
-                                  Token(5, 'the', '_', '_', '_', '_', 7, 'nmod', '_', '_'),
-                                  Token(6, 'bus', '_', '_', '_', '_', 7, 'nmod', '_', '_'),
-                                  Token(7, 'station', '_', '_', '_', '_', 4, 'pmod', '_', '_')],
-                                 {Arc(2, 'obj', 1), Arc(0, 'root', 2), Arc(2, 'subj', 3),
-                                  Arc(3, 'adv', 4), Arc(6, 'nmod', 5), Arc(4, 'pmod', 7), }))) - 5 / 7 < 0.0001
-
-
-# Sentence Sentence -> Integer
-def nbr_of_tokens_with_correct_head(s_pred, s_gold):
-    """Given a sentence with predicted arcs/labels and the same sentence with gold standard arcs/sentence,
-    return the number of correct attachments."""
-    return len([t_pred for t_pred, t_gold in zip(s_pred, s_gold) if t_pred.head == t_gold.head])
-
 
 # -----------------
 # Oracle
@@ -901,14 +850,22 @@ if __name__ == '__main__':
     if args.model and args.vectorizer:
         model_path = args.model
         vec_path = args.vectorizer
+        print('Loading model...', end='')
         guide_function = load_model(model_path, vec_path)
+        print('done')
 
     else:
+        print('Training the classifier...')
         guide_function = train(args.train, args.development)
 
     # parse input file
     cwd = os.getcwd()
+    counter = 1
+    print('Parsing sentences...')
     with open(os.path.join(cwd, args.output_file), 'w') as output_file:
         for s in read_sentences(args.input_file):
+            if counter % 20 == 0:
+                print('Parsing sentence %d' % counter)
             final_config = parse(s, guide_function)
             output_file.write(s2conll(c2s(final_config)) + '\n')
+            counter += 1
