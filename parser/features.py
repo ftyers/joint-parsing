@@ -137,6 +137,81 @@ def extract_features_eng(c, as_dict=False):
             feature = 'None'
         return feature
 
+    def deprel_stk0():
+        try:
+            return c.sentence[c.stack[-1]].deprel
+        except IndexError:
+            return 'None'
+
+    def form_of_stack_top_head():
+        try:
+            for arc in c.arcs:
+                if arc.d == c.stack[-1]:
+                    return arc.h.form
+        except IndexError:
+            return 'None'
+        return 'None'
+
+    # ~~~~~~~~~~~~~~~~~~~~ morphological features
+    # these return a list of features instead of a single one
+    def morph_of_buffer_front():
+        morph = c.sentence[c.buffer[0]].feats.split('|')
+        return [('b0.morph{0}'.format(i), morph[i]) for i in range(len(morph))]
+
+    def morph_of_stack_top():
+        try:
+            morph = c.sentence[c.stack[-1]].feats.split('|')
+        except IndexError:
+            return []
+
+        return [('s0.morph{0}'.format(i), morph[i]) for i in range(len(morph))]
+
+    def morph_string_of_buffer_front():
+        morph = c.sentence[c.buffer[0]].feats
+        return [('b0.morph_string', morph)]
+
+    def morph_string_of_stack_top():
+        try:
+            morph = c.sentence[c.stack[-1]].feats
+        except IndexError:
+            return []
+        return [('s0.morph_string', morph)]
+
+    def morph_of_second_stack_item():
+        try:
+            morph = c.sentence[c.stack[-2]].feats.split('|')
+        except IndexError:
+            return []
+        return [('s1.morph{0}'.format(i), morph[i]) for i in range(len(morph))]
+
+    def morph_of_second_buffer_item():
+        try:
+            morph = c.sentence[c.buffer[1]].feats.split('|')
+        except IndexError:
+            return []
+        return [('b1.morph{0}'.format(i), morph[i]) for i in range(len(morph))]
+
+    def morph_of_third_buffer_item():
+        try:
+            morph = c.sentence[c.buffer[2]].feats.split('|')
+        except IndexError:
+            return []
+        return [('b2.morph{0}'.format(i), morph[i]) for i in range(len(morph))]
+
+    def get_all_morph_features(as_dict):
+        feats = morph_of_stack_top() + morph_of_second_stack_item() + morph_of_buffer_front() + \
+                morph_of_second_buffer_item() + morph_of_third_buffer_item() \
+                + morph_string_of_buffer_front() \
+                + morph_string_of_stack_top()
+
+        if as_dict:
+            return dict(feats)
+
+        else:
+            return ['='.join(item) for item in feats]
+
+    morph_features = get_all_morph_features(as_dict)
+
     if not as_dict:
         return ['bias',  # bias what?
                 'b0.form=' + form_of_buffer_front(), 'b0.pos=' + pos_of_buffer_front(),
@@ -155,14 +230,16 @@ def extract_features_eng(c, as_dict=False):
                 'rd(s0).deprel=' + deprel_rdep_stk0(),
                 'ld(s0).deprel=' + deprel_ldep_stk0(),
                 'rd(b0).deprel=' + deprel_rdep_buf0(),
-                'ld(b0).deprel=' + deprel_ldep_buf0()
-                ]
+                'ld(b0).deprel=' + deprel_ldep_buf0(),
+                's0.deprel=' + deprel_stk0(),
+                's0_head.form=' + form_of_stack_top_head(),
+                ] + morph_features
     else:
-        return dict(zip(
+        feature_dict = dict(zip(
             ('b0.form', 'b0.pos', 's0.form', 's0.pos', 'b1.pos', 's1.pos', 'ld(b0).pos',
              's0.pos b0.pos', 's0.pos b0.form', 's0.form b0.pos', 's0.form b0.form',
              's0.lemma', 'b0.lemma', 'b1.form', 'b2.pos', 'b3.pos', 'rd(s0).deprel',
-             'ld(s0).deprel', 'rd(b0).deprel', 'ld(b0).deprel'),
+             'ld(s0).deprel', 'rd(b0).deprel', 'ld(b0).deprel', 's0.deprel', 's0_head.form'),
             (
                 form_of_buffer_front(),
                 pos_of_buffer_front(),
@@ -182,8 +259,10 @@ def extract_features_eng(c, as_dict=False):
                 deprel_rdep_stk0(),
                 deprel_ldep_stk0(),
                 deprel_rdep_buf0(),
-                deprel_ldep_buf0()
+                deprel_ldep_buf0(),
+                deprel_stk0(),
+                form_of_stack_top_head()
             )
         ))
-
-# fixme perhaps a better test case
+        feature_dict.update(morph_features)
+        return feature_dict
