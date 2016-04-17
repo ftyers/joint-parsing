@@ -71,6 +71,7 @@ def collect_tokens(lines):
                     new_tier(tokens)
                     write_token(next_token, tokens)
                     last_id = next_id
+                    in_range = False
                     break
 
                 else:
@@ -86,7 +87,6 @@ def collect_tokens(lines):
             write_token(token, tokens)
 
     return [item for item in tokens if item]
-
 
 
 def make_sentences(lines):
@@ -109,10 +109,13 @@ def make_sentences(lines):
     return sentences
 
 
-def read_sentences(filename):
+def read_conllz(filename, signals=False):
     """
     Generates sentences from CONLLZ file
     :param filename: path to conllz file
+    :param signals: whether or not to send signals at the end of each macro-sentence.
+    If True, the generator will return None after each group of alternatives obtained
+    from one sentence.
     """
     with open(filename, 'r') as f:
 
@@ -122,12 +125,19 @@ def read_sentences(filename):
             # if sentence buffer is empty, get more sentences from file
             if not sentence_buffer:
 
+                if signals:
+                    sentence_buffer.append(None)
+
                 # store lines from one sentence in a buffer to be processed in batches
                 line_buffer = deque()
                 new_line = f.readline()
 
                 # add lines to buffer until an empty line
                 while new_line != '\n':
+
+                    if new_line.startswith('#'):  # skip comments
+                        new_line = f.readline()
+                        continue
                     line_buffer.append(new_line)
                     new_line = f.readline()
 
@@ -167,7 +177,7 @@ S2 = [
 
 def test_read_sentences():
     filename = 'kaz.conllz'
-    sentences = read_sentences(filename)
+    sentences = read_conllz(filename)
     s1 = next(sentences)
     s2 = next(sentences)
     assert s1 == S1
