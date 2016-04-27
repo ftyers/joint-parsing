@@ -6,6 +6,53 @@ from copy import copy
 from sdp import ROOT, read_token, Token
 
 
+def enumerate_tokens(sentences):
+    """
+    Fix token ids after some of the tokens have been left out
+    """
+    max_length = sentences[0][-1].id + 1
+    for sentence in sentences:
+        if len(sentence) != max_length:
+            for i in range(len(sentence)):
+                sentence[i] = Token(i,
+                                    sentence[i][1],
+                                    sentence[i][2],
+                                    sentence[i][3],
+                                    sentence[i][4],
+                                    sentence[i][5],
+                                    sentence[i][6],
+                                    sentence[i][7],
+                                    sentence[i][8],
+                                    sentence[i][9],
+                                    )
+
+
+def collect_surface_tokens(lines):
+    """
+    From a list of lines, collect all surface form tokens.
+    Surface tokens mean the tokens that have spanned ids,
+    or just the token itself if it is the only token with
+    its id.
+    """
+    max_id = 0
+    tokens = []
+
+    for line in lines:
+        index = line.split('\t')[0]
+
+        try:
+            index = int(index)
+            if index > max_id:  # reached the next independent token
+                tokens.append('\t'.join((line.split('\t')[0], line.split('\t')[1])))
+
+        except ValueError:
+            ids = index.split('-')
+            max_id = int(ids[-1])
+            tokens.append('\t'.join((line.split('\t')[0], line.split('\t')[1])))
+
+    return tokens
+
+
 def collect_tokens(lines):
     """
     Collect tokens from a list of CONLL-Z lines.
@@ -86,7 +133,15 @@ def collect_tokens(lines):
                 new_tier(tokens)
             write_token(token, tokens)
 
-    return [item for item in tokens if item]
+    # remove empty tokens
+    tokens = [item for item in tokens if item]
+
+    # I plug in here to save token counts, which are used to calculate ambiguity
+    # writes number of tokens \t number of analyses
+    # with open('/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/token_counts', 'a') as f:
+    #     f.write('\t'.join((str(len(tokens)), str(sum([len(tier) for tier in tokens]))))+'\n')
+
+    return tokens
 
 
 def make_sentences(lines):
@@ -106,6 +161,9 @@ def make_sentences(lines):
             for n in range(len(tokens[i])):
                 new_sentences.append(copy(sentence) + tokens[i][n])
         sentences = new_sentences
+
+    enumerate_tokens(sentences)
+
     return sentences
 
 
@@ -119,13 +177,15 @@ def read_conllz(filename, signals=False):
     """
     with open(filename, 'r') as f:
 
+        first = True
+
         sentence_buffer = deque()
         while True:
 
             # if sentence buffer is empty, get more sentences from file
             if not sentence_buffer:
 
-                if signals:
+                if signals and not first:
                     sentence_buffer.append(None)
 
                 # store lines from one sentence in a buffer to be processed in batches
@@ -133,7 +193,7 @@ def read_conllz(filename, signals=False):
                 new_line = f.readline()
 
                 # add lines to buffer until an empty line
-                while new_line != '\n':
+                while new_line != '\n' and new_line != '':
 
                     if new_line.startswith('#'):  # skip comments
                         new_line = f.readline()
@@ -142,17 +202,67 @@ def read_conllz(filename, signals=False):
                     new_line = f.readline()
 
                 # process lines in buffer
-                sentences = make_sentences(line_buffer)
+                if line_buffer:
+                    sentences = make_sentences(line_buffer)
+                else:  # eof
+                    try:
+                        yield sentence_buffer.popleft()
+                    except IndexError:  # buffer empty
+                        return
+
+                print('Extracted %d sentences' % len(sentences))
 
                 # store sentences
                 for item in sentences:
                     sentence_buffer.append(item)
+                first = False
 
             # return first item on the buffer
             try:
                 yield sentence_buffer.popleft()
             except IndexError:  # buffer empty
                 return
+
+
+def read_conllz_for_joint(corpus):
+    """
+    Reads sentences from conllz file for joint disambiguation.
+    The difference from read_conllz is that each original sentence
+    gets only one representation, and it is not a flat sequence of
+    tokens, but a sequence of (token, [analyses]).
+    """
+    with open(corpus) as f:
+
+        sentences = deque()
+        line_buffer = deque()
+        new_line = f.readline()
+
+        while True:
+
+            # read all lines pertaining to one sentence
+            while new_line != '\n' and new_line != '':
+
+                if new_line.startswith('#'):  # skip comments
+                    new_line = f.readline()
+                    continue
+                line_buffer.append(new_line)
+                new_line = f.readline()
+
+            new_line = f.readline()
+
+            if line_buffer:
+                other_buffer = copy(line_buffer)  # because we need to get title tokens from there as well
+
+                tokens = collect_tokens(line_buffer)
+                title_tokens = collect_surface_tokens(other_buffer)
+
+                sentences.append([i for i in zip(title_tokens, tokens)])
+
+            else:  # eof
+                try:
+                    yield sentences.popleft()
+                except IndexError:  # buffer empty
+                    return
 
 
 S1 = [
@@ -183,5 +293,10 @@ def test_read_sentences():
     assert s1 == S1
     assert s2 == S2
 
+
 if __name__ == '__main__':
-    test_read_sentences()
+    # test_read_sentences()
+    for i in read_conllz_for_joint('/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/allmorph_short'):
+        for token in i:
+            print(token)
+        print()
