@@ -9,9 +9,12 @@ import os
 import copy
 import numpy
 from features import extract_features_eng
+from joint_features import extract_features
 from metrics import *
+from conllz import read_conllz_for_joint, SurfaceToken
 
 from sklearn.linear_model import SGDClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.feature_extraction import DictVectorizer
 
 from sklearn.metrics import classification_report
@@ -241,7 +244,7 @@ def test_parse():
 
 
 # Filename -> (generator (tupleof Sentence, (listof (tupleof FeatureVector, String))))
-def generate_training_data(train_conll, as_dict=False):
+def generate_training_data(train_conll, feature_config=None):
     """Generate sentence and a list of (feature vector, expected label) tuples (representing
     configuration and correct transition operation) out of the training sentences.
     """
@@ -250,7 +253,11 @@ def generate_training_data(train_conll, as_dict=False):
         fvecs_and_labels = []
         while c.buffer:
             tr = oracle(c)
-            fvecs_and_labels.append((extract_features_eng(c, as_dict), tr.op+'_'+tr.l))
+            # fvecs_and_labels.append((extract_features_eng(c, as_dict), tr.op+'_'+tr.l))
+
+            # use new feature extractor -- swap with the previous line if things break
+            fvecs_and_labels.append((extract_features(c, feature_config), tr.op+'_'+tr.l))
+
             if tr.op == 'sh':
                 c = shift(c)
             elif tr.op == 'la':
@@ -308,7 +315,7 @@ def train_internal_classifier(train_conll):
     training_collection = []
     for s, fvecs_labels in generate_training_data(train_conll):
         training_collection.extend(fvecs_labels)
-    dev_sents = list(read_sentences('data/en-ud-dev.conllu'))  # fixme but why hardcode?
+    dev_sents = list(read_sentences('data/en-ud-dev.conllu'))
 
     classifier = classifiers.MulticlassPerceptron(['sh', 'ra', 'la'])
     best_classifier = copy.deepcopy(classifier)
@@ -316,7 +323,7 @@ def train_internal_classifier(train_conll):
     uas_after = 0.0
     iter = 0
 
-    while iter < 15:  # fixme hardcoded number of iterations
+    while iter < 15:
         uas_before = uas_after
         classifier.train_one_iteration(training_collection)
         uas_after = micro_uas(
@@ -348,12 +355,12 @@ def train(training_path, development_path):
     development_collection = [] # do I need features for these? um, yes.
     dev_labels = []
 
-    for s, fvecs_labels in generate_training_data(training_path, as_dict=True):
+    for s, fvecs_labels in generate_training_data(training_path):
         for item in fvecs_labels:
             training_collection.append(item[0])
             labels.append(item[-1])
 
-    for s, fvecs_labels in generate_training_data(development_path, as_dict=True):
+    for s, fvecs_labels in generate_training_data(development_path):
 
         for item in fvecs_labels:
             development_collection.append(item[0])
@@ -366,12 +373,7 @@ def train(training_path, development_path):
     data_test = vec.transform(development_collection)
     target_test = numpy.array(dev_labels)
 
-    # set parameters for grid search
-    # tuned_parameters = [{'loss': ['hinge', 'log'], 'shuffle': [True],
-    #                      'learning_rate': ['constant'], 'eta0': [2**(-8)], 'average': [True, False],
-    #                      'penalty': ['l1', 'l2', 'elasticnet'],
-    #                      'alpha': [0.001, 0.0001, 0.00001, 0.000001]}]
-
+    # that's a lot of code for training different classifiers
     # smaller set
     tuned_parameters = [{'loss': ['hinge'], 'shuffle': [True],
                          'learning_rate': ['constant'], 'eta0': [2**(-8)], 'average': [True, False],
@@ -411,16 +413,15 @@ def train(training_path, development_path):
 
         joblib.dump(best, 'best_model_for_%s.pkl' % (os.path.basename(training_path)))
         print()
-
     joblib.dump(vec, 'vectorizer_for_%s.pkl' % (os.path.basename(training_path)))
 
     # Configuration -> Transition
     def guide(c):
-        vector = vec.transform(extract_features_eng(c, as_dict=True))
+        vector = vec.transform(extract_features(c))
         try:
-            transition, label = clf.predict(vector)[0].split('_')
+            transition, label = best.predict(vector)[0].split('_')
         except ValueError:
-            transition = clf.predict(vector)[0].split('_')[0]
+            transition = best.predict(vector)[0].split('_')[0]
             label = '_'
         return Transition(transition, label)
 
@@ -437,8 +438,8 @@ def load_model(clf_path, vec_path):
     clf = joblib.load(clf_path)
     vec = joblib.load(vec_path)
 
-    def guide(c):
-        vector = vec.transform(extract_features_eng(c, as_dict=True))
+    def guide(c, feats=None):
+        vector = vec.transform(extract_features(c, feats))
         try:
             transition, label = clf.predict(vector)[0].split('_')
         except ValueError:
@@ -640,11 +641,19 @@ def test_extract_features():
 # Sentence -> Configuration
 def initialize_configuration(s):
     """Initialize a configuration with root in stack and all other tokens in buffer."""
-    return Configuration([0], [t.id for t in s[1:]], s, set())
+    try:
+        return Configuration([0], [t.id for t in s[1:]], s, set())
+    except AttributeError:
+        c = initialize_configuration_joint(s)
+        return c
 
 
 def test_initialize_configuration():
     assert initialize_configuration(S_1) == C_1
+
+
+def initialize_configuration_joint(s):
+    return Configuration([0], [i for i in range(1, len(s))], s, set())
 
 
 # Sentence -> (setof Arc)
@@ -655,6 +664,116 @@ def get_arcs(s):
 
 def test_get_arcs():
     assert get_arcs(S_1) == {Arc(2, 'subj', 1), Arc(0, 'root', 2), Arc(4, 'nmod', 3), Arc(2, 'obj', 4)}
+
+
+def disambiguate_buffer_front(c):
+    """
+    Given a configuration, check if buffer front needs disambiguation and perform it
+    """
+    b0 = c.sentence[c.buffer[0]]
+    analyses = b0[1]
+    best_analysis = analyses[0]  # todo put a real guide here
+    last_id = get_span_id(b0)
+    try: # todo calculate diff
+        diff = last_id - best_analysis[-1].id  # don't ask
+        new_sentence = expand_sentence(c.sentence, best_analysis, diff)
+    except AttributeError:  # was already disambiguated, do nothing
+        return c
+    new_buffer = expand_buffer(c.buffer, new_sentence, best_analysis)
+
+    return Configuration(c.stack, new_buffer, new_sentence, c.arcs)
+
+
+def expand_sentence(s, analyses, diff=0):
+    """
+    Replace surface token in the sentence with disambiguated tokens.
+    Assume the tokens before it have already been disambiguated.
+    :param diff: a number indicating by how much the ids should shift
+    in the resulting sentence. Happens if not the whole range is selected,
+    e.g. 1-3 -> 1 (diff=2)
+    """
+    i = analyses[0].id  # find index of token to be removed
+    if diff:
+        sentence = enumerate_tokens(s[i+1:], diff)
+        return s[:i] + analyses + sentence
+    return s[:i] + analyses + s[i+1:]
+
+
+def expand_buffer(b, s, analyses):
+    """
+    Update buffer to match the ids of the newly disambiguated tokens
+    :param b: buffer
+    :param s: sentence
+    :param analyses: best analysis selected in disambiguation (may contain several tokens)
+    """
+    idx = analyses[0].id
+    return [i for i in range(idx, len(s))]
+
+
+def get_span_id(b0):
+    """
+    Return the last id of the span, or the only id of a simple token
+    """
+    try:
+        last_id = int(b0[0].id.split('-')[1])
+    except IndexError:
+        last_id = int(b0[0].id)
+    except AttributeError:
+        last_id = b0.id
+
+    return last_id
+
+
+def enumerate_tokens(s, d):
+    """
+    In case a range token was interpreted as only part of the range,
+    e.g. 1-2 -> 1, all token ids should shift
+    :param s: part of sentence that has to shift
+    :param d: difference by which to shift
+    """
+    new_sentence = []
+    for item in s:
+        try:  # move a disambiguated token
+            i = item.id
+            new_sentence.append(Token(
+                i-d,
+                item[1],
+                item[2],
+                item[3],
+                item[4],
+                item[5],
+                item[6],
+                item[7],
+                item[8],
+                item[9],
+            ))
+        except AttributeError:  # move an ambiguous token
+            surface_token = item[0]
+            try:
+                surface_id = int(surface_token.id)-1
+            except ValueError:
+                surface_id = '-'.join([str(int(j)-1) for j in surface_token.id.split('-')])
+            new_surface_token = SurfaceToken(str(surface_id), surface_token.form)
+            analyses = []
+            for analysis in item[1]:
+                new_analysis = []
+                for token in analysis:
+                    i = token.id
+                    new_analysis.append(Token(
+                        i-d,
+                        token[1],
+                        token[2],
+                        token[3],
+                        token[4],
+                        token[5],
+                        token[6],
+                        token[7],
+                        token[8],
+                        token[9],
+                    ))
+                analyses.append(new_analysis)
+            new_sentence.append((new_surface_token, analyses))
+    return new_sentence
 
 
 # - - - - - - - - -
@@ -746,7 +865,7 @@ def read_sentences(f):
     with open(f, 'r') as conll_file:
         s = [ROOT]
         for line in conll_file:
-            if line.strip():
+            if line.strip() and not line.startswith('#'):
                 s.append(read_token(line))
             elif len(s) != 1:
                 yield s
@@ -804,11 +923,100 @@ def test_read_token():
 # ---------------------
 # Runner
 
+def train_with_classifier(training_path, development_path, classifier, parameters, features):
+    """
+    Train the model using the classifier and its parameters supplied.
+    :param features: a set of features to use in this round of training
+    :param training_path: path to training corpus
+    :param development_path: path to development corpus
+    :param classifier: a sklearn classifier object
+    :param parameters: a list of parameters to use for grid search
+    """
+
+    training_collection = []
+    labels = []
+    development_collection = []
+    dev_labels = []
+
+    for s, fvecs_labels in generate_training_data(training_path, feature_config=features):
+        for item in fvecs_labels:
+            training_collection.append(item[0])
+            labels.append(item[-1])
+
+    for s, fvecs_labels in generate_training_data(development_path, feature_config=features):
+
+        for item in fvecs_labels:
+            development_collection.append(item[0])
+            dev_labels.append(item[-1])
+
+    # transform string features via one-hot encoding
+    vec = DictVectorizer()
+    data = vec.fit_transform(training_collection)
+    target = numpy.array(labels)
+    data_test = vec.transform(development_collection)
+    target_test = numpy.array(dev_labels)
+
+    score = 'precision'
+
+    clf = grid_search.GridSearchCV(classifier, parameters, cv=5, scoring='%s_weighted' % score, verbose=0)
+    clf.fit(data, target)
+
+    print("Best parameters set found on development set:")
+    print()
+    print(clf.best_params_)
+    print()
+    print("Grid scores on development set:")
+    print()
+    for params, mean_score, scores in clf.grid_scores_:
+        print("%0.3f (+/-%0.03f) for %r"
+              % (mean_score, scores.std() * 2, params))
+    print()
+    y_true, y_pred = target_test, clf.predict(data_test)
+    print(classification_report(y_true, y_pred))
+    print(clf.best_score_)
+
+    joblib.dump(clf, 'model_for_%s.pkl' % (os.path.basename(training_path)))
+    joblib.dump(vec, 'vectorizer_for_%s.pkl' % (os.path.basename(training_path)))
+
+    def guide(c, feats):
+
+        vector = vec.transform(extract_features(c, feats))
+        try:
+            transition, label = clf.best_estimator_.predict(vector)[0].split('_')
+        except ValueError:
+            transition = clf.best_estimator_.predict(vector)[0].split('_')[0]
+            label = '_'
+        return Transition(transition, label)
+
+    return guide
+
+
+def parse_with_feats(s, oracle_or_guide, feats):
+    """Given a sentence and a next transition predictor, parse the sentence."""
+    c = initialize_configuration(s)
+    while c.buffer:
+        c = disambiguate_buffer_front(c)  # todo not call it unless needed -- check before calling
+        tr = oracle_or_guide(c, feats)
+        if tr.op == 'sh':
+            c = shift(c)
+        elif tr.op == 'la':
+            try:
+                c = left_arc(c, tr.l)
+            except IndexError:
+                c = shift(c)
+        elif tr.op == 'ra':
+            try:
+                c = right_arc(c, tr.l)
+            except IndexError:
+                c = shift(c)
+    return c
+
+
 class AbsPath(argparse.Action):
 
     def __call__(self, parser, namespace, path, option_string=None):
-        cwd = os.getcwd()
-        # cwd = os.path.dirname(os.path.realpath(__file__))  # use for debugging and config launches
+        # cwd = os.getcwd()
+        cwd = os.path.dirname(os.path.realpath(__file__))  # use for debugging and config launches
         if not os.path.isabs(path):
             path = os.path.join(cwd, path)
         setattr(namespace, self.dest, path)
@@ -856,16 +1064,35 @@ if __name__ == '__main__':
 
     else:
         print('Training the classifier...')
-        guide_function = train(args.train, args.development)
+        # guide_function = train(args.train, args.development)
+        # fixme debugging the crazy decision tree
+        guide_function = train_with_classifier(args.train, args.development,
+                                               DecisionTreeClassifier(),
+                                               [{'criterion': ['gini'], 'splitter': ['random'], 'class_weight': [None]}],
+                                               ["b0.pos", "s0.pos", "b1.pos", "s1.pos", "ld(b0).pos",
+                                                            "s0.pos b0.pos", "s0.form b0.pos", "b2.pos", "b3.pos",
+                                                            "s0.lemma", "b0.lemma", "morph"])
 
     # parse input file
     cwd = os.getcwd()
     counter = 1
     print('Parsing sentences...')
     with open(os.path.join(cwd, args.output_file), 'w') as output_file:
-        for s in read_sentences(args.input_file):
+
+        gold_sentences = read_sentences('/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/puupankki.conllx_test')
+        lasses = []
+        # for s in read_sentences(args.input_file):
+        for s in read_conllz_for_joint(args.input_file):
             if counter % 20 == 0:
                 print('Parsing sentence %d' % counter)
-            final_config = parse(s, guide_function)
+            final_config = parse_with_feats(s, guide_function, ["b0.pos", "s0.pos", "b1.pos", "s1.pos", "ld(b0).pos",
+                                                            "s0.pos b0.pos", "s0.form b0.pos", "b2.pos", "b3.pos",
+                                                            "s0.lemma", "b0.lemma", "morph"])
             output_file.write(s2conll(c2s(final_config)) + '\n')
             counter += 1
+
+            parsed_sentence = c2s(final_config)
+            gold_sentence = next(gold_sentences)
+            lasses.append(las(parsed_sentence, gold_sentence[1:]))
+        #
+        print('LAS: %.3f' % float(sum(lasses)/len(lasses)))
