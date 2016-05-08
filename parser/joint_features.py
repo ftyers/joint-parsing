@@ -1,17 +1,12 @@
-def extract_features(c):
+def extract_features(c, config=None): # todo remove as_dict from the whole parser when cleaning up
     """
     Represent configuration as a feature vector.
     Assume the stack and the buffer front is always disambiguated.
     For other positions, if tokens are ambiguous, return:
         pos features: ambiguity class for all possible tokens
         form: form of surface token
+    :param config: a set of feature names to be returned
     """
-
-    # note: you may have singular tokens in the buffer
-    # if you disambiguated buffer front into 3 tokens,
-    # the first 3 tokens on the buffer are single
-
-    # check each time I guess
 
     def ambiguity_class(tokens):
         """
@@ -50,7 +45,7 @@ def extract_features(c):
         except IndexError:
             return 'None'
         except AttributeError:
-            return ambiguity_class(c.buffer[1][1])
+            return ambiguity_class(c.sentence[c.buffer[1]][1])
 
     def pos_of_second_stack_item():
         try:
@@ -103,7 +98,7 @@ def extract_features(c):
         try:
             return c.sentence[c.buffer[1]].form
         except AttributeError:
-            return c.sentence[c.buffer[1][1]].form
+            return c.sentence[c.buffer[1]][0].form
         except IndexError:
             return 'None'
 
@@ -113,7 +108,7 @@ def extract_features(c):
         except IndexError:
             return 'None'
         except AttributeError:
-            return ambiguity_class(c.sentence[c.buffer[1]])
+            return ambiguity_class(c.sentence[c.buffer[2]][1])
 
     def pos_buf3():
         try:
@@ -121,7 +116,7 @@ def extract_features(c):
         except IndexError:
             return 'None'
         except AttributeError:
-            return ambiguity_class(c.sentence[c.buffer[3]])
+            return ambiguity_class(c.sentence[c.buffer[3]][1])
 
     def deprel_rdep_stk0():
         try:
@@ -232,8 +227,6 @@ def extract_features(c):
 
         return dict(feats)
 
-    morph_features = get_all_morph_features()
-
     feature_dict = dict(zip(
             (
                 'b0.form',
@@ -283,5 +276,17 @@ def extract_features(c):
                 form_of_stack_top_head()
             )
         ))
-    feature_dict.update(morph_features)
+
+    new_feature_dict = {}
+    if config:  # remove unwanted features
+        for name, value in feature_dict.items():
+            if name in config:
+                new_feature_dict[name] = value
+
+        feature_dict = new_feature_dict
+
+        if 'morph' in config:
+            morph_features = get_all_morph_features()
+            feature_dict.update(morph_features)
+
     return feature_dict
