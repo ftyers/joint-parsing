@@ -1,9 +1,30 @@
 """
 Parse ambiguous CONLL-Z input into a sequence of sentences
 """
-from collections import deque
+from collections import deque, namedtuple
 from copy import copy
-from sdp import ROOT, read_token, Token
+
+SurfaceToken = namedtuple('SurfaceToken', ['id', 'form'])
+Token = namedtuple('Token', ['id', 'form', 'lemma', 'cpostag', 'postag', 'feats',
+                             'head', 'deprel', 'phead', 'pdeprel'])
+ROOT = Token(0, 'ROOT', 'ROOT', 'ROOT', 'ROOT', 'ROOT', 0, 'ROOT', 0, 'ROOT')
+
+
+def read_token(line):
+    """Parse a line of the file in CoNLL06 format and return a Token."""
+    token = line.strip().split('\t')
+    if len(token) == 6:
+        token += ['_', '_', '_', '_']
+    id, form, lemma, cpostag, postag, feats, head, deprel, phead, pdeprel = token
+    try:
+        head = int(head)
+    except ValueError:
+        head = '_'
+    try:
+        phead = int(phead)
+    except ValueError:
+        phead = '_'
+    return Token(int(id), form, lemma, cpostag, postag, feats, head, deprel, phead, pdeprel)
 
 
 def enumerate_tokens(sentences):
@@ -43,12 +64,12 @@ def collect_surface_tokens(lines):
         try:
             index = int(index)
             if index > max_id:  # reached the next independent token
-                tokens.append('\t'.join((line.split('\t')[0], line.split('\t')[1])))
+                tokens.append(SurfaceToken(line.split('\t')[0], line.split('\t')[1]))
 
         except ValueError:
             ids = index.split('-')
             max_id = int(ids[-1])
-            tokens.append('\t'.join((line.split('\t')[0], line.split('\t')[1])))
+            tokens.append(SurfaceToken(line.split('\t')[0], line.split('\t')[1]))
 
     return tokens
 
@@ -256,7 +277,7 @@ def read_conllz_for_joint(corpus):
                 tokens = collect_tokens(line_buffer)
                 title_tokens = collect_surface_tokens(other_buffer)
 
-                sentences.append([i for i in zip(title_tokens, tokens)])
+                sentences.append([ROOT]+[i for i in zip(title_tokens, tokens)])
 
             else:  # eof
                 try:
