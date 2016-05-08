@@ -29,12 +29,12 @@ def train_with_classifier(training_path, development_path, classifier, parameter
     development_collection = []
     dev_labels = []
 
-    for s, fvecs_labels in generate_training_data(training_path, feature_config=features, as_dict=True):
+    for s, fvecs_labels in generate_training_data(training_path, feature_config=features):
         for item in fvecs_labels:
             training_collection.append(item[0])
             labels.append(item[-1])
 
-    for s, fvecs_labels in generate_training_data(development_path, feature_config=features, as_dict=True):
+    for s, fvecs_labels in generate_training_data(development_path, feature_config=features):
 
         for item in fvecs_labels:
             development_collection.append(item[0])
@@ -69,15 +69,16 @@ def train_with_classifier(training_path, development_path, classifier, parameter
     def guide(c, feats):
 
         # c = disambiguate_buffer_front(c)
-        vector = vec.transform(extract_features(c, feats))
+        vector = vec.transform(extract_features(c, config=feats))
         try:
-            transition, label = clf.predict(vector)[0].split('_')
+            transition, label = clf.best_estimator_.predict(vector)[0].split('_')
         except ValueError:
-            transition = clf.predict(vector)[0].split('_')[0]
+            transition = clf.best_estimator_.predict(vector)[0].split('_')[0]
             label = '_'
         return Transition(transition, label)
 
     return guide
+
 
 def parse_with_feats(s, oracle_or_guide, feats):
     """Given a sentence and a next transition predictor, parse the sentence."""
@@ -100,13 +101,36 @@ def parse_with_feats(s, oracle_or_guide, feats):
 
 if __name__ == '__main__':
 
-    # todo change on the server
     train = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/puupankki.conllx_train'
     dev = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/puupankki.conllx_dev'
     test = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/puupankki.conllx_test_reduced'
     gold = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/puupankki.conllx_test'
-    feature_set = json.load(open('/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/feature_config'))
+    feature_set = json.load(open('/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/feature_config_more_deprel'))
 
+    # feature_set = [["no_deprel",
+    #                 ['b0.form',
+    # 'b0.pos',
+    # 's0.form',
+    # 's0.pos',
+    # 'b1.pos',
+    # 's1.pos',
+    # 'ld(b0).pos',
+    # 's0.pos b0.pos',
+    # 's0.pos b0.form',
+    # 's0.form b0.pos',
+    # 's0.form b0.form',
+    # 's0.lemma',
+    # 'b0.lemma',
+    # 'b1.form',
+    # 'b2.pos',
+    # 'b3.pos',
+    # # 'rd(s0).deprel',
+    # # 'ld(s0).deprel',
+    # # 'rd(b0).deprel',
+    # # 'ld(b0).deprel',
+    # # 's0.deprel',
+    # 's0_head.form']
+    #                 ]]
     classifiers = [
         SGDClassifier(),
         DecisionTreeClassifier(),
@@ -123,12 +147,17 @@ if __name__ == '__main__':
             'criterion': ['gini', 'entropy'], 'splitter': ['best', 'random'],
             'class_weight': ['balanced', None]
         }],
+        # [{
+        #     'criterion': ['gini'], 'splitter': ['random'],
+        #     'class_weight': [None]
+        # }],
         [{
             'weights': ['uniform', 'distance'], 'leaf_size': [5, 10, 30, 50],
 
         }]
     ]
 
+    # output_file = open('/Users/Sereni/PycharmProjects/Joint Parsing/tuning_corpus', 'w')
     for clf, param in zip(classifiers, params):
         for set_name, feats in feature_set:
 
@@ -146,6 +175,10 @@ if __name__ == '__main__':
                 gold_sentence = next(gold_sentences)
                 lasses.append(las(parsed_sentence, gold_sentence[1:]))
 
+                # output_file.write(s2conll(c2s(final_config)) + '\n')
+
             print('Feature set: %s' % set_name)
             print('LAS: %.3f' % float(sum(lasses)/len(lasses)))
             print()
+
+    # output_file.close()
