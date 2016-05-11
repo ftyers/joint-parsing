@@ -1,0 +1,73 @@
+Best parameters set found on development set:
+
+{'average': False, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 0.0001, 'shuffle': True, 'penalty': 'l2', 'learning_rate': 'constant'}
+
+Grid scores on development set:
+
+0.763 (+/-0.032) for {'average': True, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 0.001, 'shuffle': True, 'penalty': 'l1', 'learning_rate': 'constant'}
+0.836 (+/-0.014) for {'average': True, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 0.001, 'shuffle': True, 'penalty': 'l2', 'learning_rate': 'constant'}
+0.830 (+/-0.017) for {'average': True, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 0.001, 'shuffle': True, 'penalty': 'elasticnet', 'learning_rate': 'constant'}
+0.839 (+/-0.020) for {'average': False, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 0.001, 'shuffle': True, 'penalty': 'l1', 'learning_rate': 'constant'}
+0.864 (+/-0.013) for {'average': False, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 0.001, 'shuffle': True, 'penalty': 'l2', 'learning_rate': 'constant'}
+0.856 (+/-0.020) for {'average': False, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 0.001, 'shuffle': True, 'penalty': 'elasticnet', 'learning_rate': 'constant'}
+0.834 (+/-0.009) for {'average': True, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 0.0001, 'shuffle': True, 'penalty': 'l1', 'learning_rate': 'constant'}
+0.837 (+/-0.012) for {'average': True, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 0.0001, 'shuffle': True, 'penalty': 'l2', 'learning_rate': 'constant'}
+0.837 (+/-0.012) for {'average': True, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 0.0001, 'shuffle': True, 'penalty': 'elasticnet', 'learning_rate': 'constant'}
+0.863 (+/-0.014) for {'average': False, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 0.0001, 'shuffle': True, 'penalty': 'l1', 'learning_rate': 'constant'}
+0.868 (+/-0.018) for {'average': False, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 0.0001, 'shuffle': True, 'penalty': 'l2', 'learning_rate': 'constant'}
+0.865 (+/-0.027) for {'average': False, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 0.0001, 'shuffle': True, 'penalty': 'elasticnet', 'learning_rate': 'constant'}
+0.836 (+/-0.014) for {'average': True, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 1e-05, 'shuffle': True, 'penalty': 'l1', 'learning_rate': 'constant'}
+0.837 (+/-0.012) for {'average': True, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 1e-05, 'shuffle': True, 'penalty': 'l2', 'learning_rate': 'constant'}
+0.839 (+/-0.015) for {'average': True, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 1e-05, 'shuffle': True, 'penalty': 'elasticnet', 'learning_rate': 'constant'}
+0.863 (+/-0.016) for {'average': False, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 1e-05, 'shuffle': True, 'penalty': 'l1', 'learning_rate': 'constant'}
+0.867 (+/-0.019) for {'average': False, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 1e-05, 'shuffle': True, 'penalty': 'l2', 'learning_rate': 'constant'}
+0.868 (+/-0.012) for {'average': False, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 1e-05, 'shuffle': True, 'penalty': 'elasticnet', 'learning_rate': 'constant'}
+0.838 (+/-0.012) for {'average': True, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 1e-06, 'shuffle': True, 'penalty': 'l1', 'learning_rate': 'constant'}
+0.838 (+/-0.015) for {'average': True, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 1e-06, 'shuffle': True, 'penalty': 'l2', 'learning_rate': 'constant'}
+0.836 (+/-0.015) for {'average': True, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 1e-06, 'shuffle': True, 'penalty': 'elasticnet', 'learning_rate': 'constant'}
+0.868 (+/-0.020) for {'average': False, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 1e-06, 'shuffle': True, 'penalty': 'l1', 'learning_rate': 'constant'}
+0.866 (+/-0.017) for {'average': False, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 1e-06, 'shuffle': True, 'penalty': 'l2', 'learning_rate': 'constant'}
+0.866 (+/-0.013) for {'average': False, 'loss': 'hinge', 'eta0': 0.00390625, 'alpha': 1e-06, 'shuffle': True, 'penalty': 'elasticnet', 'learning_rate': 'constant'}
+
+             precision    recall  f1-score   support
+
+     la_acl       0.86      0.46      0.60        13
+   la_advcl       0.89      0.81      0.85        21
+  la_advmod       1.00      0.79      0.88        19
+    la_amod       0.83      1.00      0.91        48
+   la_appos       0.00      0.00      0.00         1
+      la_cc       0.63      0.67      0.65        18
+   la_ccomp       0.71      1.00      0.83         5
+   la_cmpnd       0.67      0.67      0.67         6
+    la_conj       0.79      0.97      0.87        38
+   la_csubj       0.33      0.25      0.29         4
+     la_det       0.77      1.00      0.87        10
+    la_disc       0.00      0.00      0.00         1
+    la_name       1.00      0.25      0.40         4
+    la_nmod       0.92      0.83      0.87        70
+la_nmod:poss       0.75      1.00      0.86        52
+  la_nummod       0.93      1.00      0.96        13
+     la_obj       0.82      1.00      0.90        28
+la_parataxis       0.00      0.00      0.00         4
+   la_punct       0.71      0.67      0.69        43
+    la_subj       0.94      0.85      0.89        59
+     la_voc       0.00      0.00      0.00         1
+  ra_advmod       1.00      0.83      0.91         6
+   ra_appos       1.00      0.07      0.12        15
+     ra_aux       0.69      0.92      0.79        12
+    ra_case       1.00      1.00      1.00        11
+      ra_cc       0.00      0.00      0.00         1
+     ra_cop       0.91      0.83      0.87        24
+    ra_disc       1.00      0.50      0.67         4
+    ra_nmod       0.00      0.00      0.00         3
+     ra_obj       0.00      0.00      0.00         1
+   ra_punct       0.94      0.84      0.89       100
+    ra_root       0.92      1.00      0.96        58
+       sh__       0.87      0.89      0.88       717
+
+avg / total       0.86      0.86      0.85      1410
+
+0.868079055136
+Feature set: all
+LAS: 0.533
+

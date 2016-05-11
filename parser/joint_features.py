@@ -22,10 +22,16 @@ def extract_features(c, config=None): # todo remove as_dict from the whole parse
         return '||'.join(sorted(set(tags)))
 
     def form_of_buffer_front():
-        return c.sentence[c.buffer[0]].form
+        try:
+            return c.sentence[c.buffer[0]].form
+        except AttributeError:
+            return c.sentence[c.buffer[0]][0].form
 
     def pos_of_buffer_front():
-        return c.sentence[c.buffer[0]].postag
+        try:
+            return c.sentence[c.buffer[0]].postag
+        except AttributeError:
+            return ambiguity_class(c.sentence[c.buffer[0]][1])
 
     def form_of_stack_top():
         try:
@@ -92,7 +98,10 @@ def extract_features(c, config=None): # todo remove as_dict from the whole parse
             return 'None'
 
     def lemma_buf0():
-        return c.sentence[c.buffer[0]].lemma
+        try:
+            return c.sentence[c.buffer[0]].lemma
+        except AttributeError:
+            return 'None'
 
     def form_buf1():
         try:
@@ -172,8 +181,11 @@ def extract_features(c, config=None): # todo remove as_dict from the whole parse
     # ~~~~~~~~~~~~~~~~~~~~ morphological features
     # these return a list of features instead of a single one
     def morph_of_buffer_front():
-        morph = c.sentence[c.buffer[0]].feats.split('|')
-        return [('b0.morph{0}'.format(i), morph[i]) for i in range(len(morph))]
+        try:
+            morph = c.sentence[c.buffer[0]].feats.split('|')
+            return [('b0.morph{0}'.format(i), morph[i]) for i in range(len(morph))]
+        except AttributeError:
+            return []
 
     def morph_of_stack_top():
         try:
@@ -184,8 +196,11 @@ def extract_features(c, config=None): # todo remove as_dict from the whole parse
         return [('s0.morph{0}'.format(i), morph[i]) for i in range(len(morph))]
 
     def morph_string_of_buffer_front():
-        morph = c.sentence[c.buffer[0]].feats
-        return [('b0.morph_string', morph)]
+        try:
+            morph = c.sentence[c.buffer[0]].feats
+            return [('b0.morph_string', morph)]
+        except AttributeError:
+            return []
 
     def morph_string_of_stack_top():
         try:
