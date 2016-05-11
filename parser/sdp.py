@@ -253,9 +253,7 @@ def generate_training_data(train_conll, feature_config=None):
         fvecs_and_labels = []
         while c.buffer:
             tr = oracle(c)
-            # fvecs_and_labels.append((extract_features_eng(c, as_dict), tr.op+'_'+tr.l))
 
-            # use new feature extractor -- swap with the previous line if things break
             fvecs_and_labels.append((extract_features(c, feature_config), tr.op+'_'+tr.l))
 
             if tr.op == 'sh':
@@ -264,6 +262,31 @@ def generate_training_data(train_conll, feature_config=None):
                 c = left_arc(c, tr.l)
             elif tr.op == 'ra':
                 c = right_arc(c, tr.l)
+        yield (s, fvecs_and_labels)
+
+
+def generate_training_data_morph(train_conll, feature_config=None):
+
+    for s in read_conllz_for_joint(train_conll):
+
+        c = initialize_configuration(s)
+        fvecs_and_labels = []
+
+        while c.buffer:
+
+            fvecs_and_labels.append((extract_features(c, feature_config), get_morph_label(c)))
+            c = disambiguate_buffer_front(c)  # convert buffer front to a flat token
+
+            tr = oracle(c)  # determine the next transition
+
+            # change configurations in parallel and continue
+            if tr.op == 'sh':
+                c = shift(c)
+            elif tr.op == 'la':
+                c = left_arc(c, tr.l)
+            elif tr.op == 'ra':
+                c = right_arc(c, tr.l)
+
         yield (s, fvecs_and_labels)
 
 
@@ -305,6 +328,25 @@ def test_generate_training_data(tmpdir):
                                                                                            Arc(2, '_', 4),
                                                                                            Arc(0, '_', 2)})),
                                                        "sh")])]
+
+
+def get_morph_label(c):
+    """
+    Given a configuration c, return morphological label of buffer front
+    Label is a concatenation of POS tag with all morphological information.
+    In case the buffer front is ambiguous, return the possible analyses joined through $.
+    On training, it should always return something like n||fem|sg or n||fem|sg&v||1sg,
+    first case for one token, second for multiple.
+
+    """
+    try:
+        return c.sentence[c.buffer[0]].postag + '||' + c.sentence[c.buffer[0]].feats
+    except AttributeError:
+        analyses = c.sentence[c.buffer[0]][1]
+        labels = []
+        for analysis in analyses:
+            labels.append('&'.join([token.postag + '||' + token.feats for token in analysis]))
+        return '$'.join(labels)
 
 
 # Filename -> Function
@@ -659,26 +701,42 @@ def initialize_configuration_joint(s):
 # Sentence -> (setof Arc)
 def get_arcs(s):
     """Return arcs from a gold standard sentence s."""
-    return {Arc(t.head, t.deprel, t.id) for t in s[1:]}
+    try:
+        return {Arc(t.head, t.deprel, t.id) for t in s[1:]}
+    except AttributeError:
+        arcs = set([])
+
+        # add the rest of the arcs
+        for item in s[1:]:
+            try:  # case item is a Token
+                arcs.add(Arc(item.head, item.deprel, item.id))
+            except AttributeError:  # item is an ambiguous token, add all arcs
+                for t in item[1][0]:
+                    arcs.add(Arc(t.head, t.deprel, t.id))
+        return arcs
 
 
 def test_get_arcs():
     assert get_arcs(S_1) == {Arc(2, 'subj', 1), Arc(0, 'root', 2), Arc(4, 'nmod', 3), Arc(2, 'obj', 4)}
 
 
-def disambiguate_buffer_front(c):
+def disambiguate_buffer_front(c, guide=None):
     """
-    Given a configuration, check if buffer front needs disambiguation and perform it
+    Given a configuration, check if buffer front needs disambiguation and perform it.
+    :param guide: a disambiguating guide function obtained at training
     """
-    b0 = c.sentence[c.buffer[0]]
-    analyses = b0[1]
-    best_analysis = analyses[0]  # todo put a real guide here
-    last_id = get_span_id(b0)
-    try: # todo calculate diff
-        diff = last_id - best_analysis[-1].id  # don't ask
-        new_sentence = expand_sentence(c.sentence, best_analysis, diff)
-    except AttributeError:  # was already disambiguated, do nothing
-        return c
+    if not isinstance(c.sentence[c.buffer[0]][1], list):
+        return c  # was already disambiguated, do nothing
+
+    if not guide:
+        guide = morph_oracle
+
+    best_analysis = guide(c)
+    last_id = get_span_id(c.sentence[c.buffer[0]])
+    diff = last_id - best_analysis[-1].id
+
+    # make new sentence and buffer to match
+    new_sentence = expand_sentence(c.sentence, best_analysis, diff)
     new_buffer = expand_buffer(c.buffer, new_sentence, best_analysis)
 
     return Configuration(c.stack, new_buffer, new_sentence, c.arcs)
@@ -723,6 +781,13 @@ def get_span_id(b0):
 
     return last_id
 
+
+def morph_oracle(c):
+    """
+    Returns the first analysis of buffer front as a list of tokens.
+    In case of the training corpus, this is the correct analysis.
+    """
+    return c.sentence[c.buffer[0]][1][0]
 
 def enumerate_tokens(s, d):
     """
@@ -991,11 +1056,86 @@ def train_with_classifier(training_path, development_path, classifier, parameter
     return guide
 
 
+def train_morph_classifier(training_path, development_path, classifier, parameters, features):
+    # nope, it's actually different from above in the guide function
+
+    training_collection = []
+    labels = []
+    development_collection = []
+    dev_labels = []
+
+    for s, fvecs_labels in generate_training_data_morph(training_path, feature_config=features):
+        for item in fvecs_labels:
+            training_collection.append(item[0])
+            labels.append(item[-1])
+
+    for s, fvecs_labels in generate_training_data_morph(development_path, feature_config=features):
+
+        for item in fvecs_labels:
+            development_collection.append(item[0])
+            dev_labels.append(item[-1])
+
+    # transform string features via one-hot encoding
+    vec = DictVectorizer()
+    data = vec.fit_transform(training_collection)
+    target = numpy.array(labels)
+    data_test = vec.transform(development_collection)
+    target_test = numpy.array(dev_labels)
+
+    score = 'precision'
+
+    clf = grid_search.GridSearchCV(classifier, parameters, cv=3, scoring='%s_weighted' % score, verbose=0)
+    clf.fit(data, target)
+
+    print("Best parameters set found on development set:")
+    print()
+    print(clf.best_params_)
+    print()
+    print("Grid scores on development set:")
+    print()
+    for params, mean_score, scores in clf.grid_scores_:
+        print("%0.3f (+/-%0.03f) for %r"
+              % (mean_score, scores.std() * 2, params))
+    print()
+    y_true, y_pred = target_test, clf.predict(data_test)
+    print(classification_report(y_true, y_pred))
+    print(clf.best_score_)
+
+    # fixme turn back on
+    # joblib.dump(clf, 'morph_model_for_%s.pkl' % (os.path.basename(training_path)))
+    # joblib.dump(vec, 'morph_vectorizer_for_%s.pkl' % (os.path.basename(training_path)))
+
+    def guide(c, feats):  # todo test guide function
+        """
+        Given a Configuration and a set of training features, disambiguate buffer
+        front of this configuration and return a list of tokens that make up the
+        best analysis.
+        Assume buffer front is not empty and is in (SurfaceToken, [analyses]) format.
+        """
+        vector = vec.transform(extract_features(c, feats))
+        predicted_tags = sorted([i for i in zip(clf.best_estimator_.predict_proba(vector), clf.best_estimator_.classes_)], reverse=True)
+
+        # get a list of tags allowed for this configuration
+        possible_tags = get_morph_label(c).split('$')
+        index_of_best_tag = 0  # nothing found case
+
+        for tag in predicted_tags:
+            if tag in possible_tags:
+                index_of_best_tag = possible_tags.index(tag)
+                break
+
+        # return the analysis corresponding to the best tagset
+        analyses = c.sentence[c.buffer[0]][1]
+        return analyses[index_of_best_tag]
+
+    return guide
+
+
 def parse_with_feats(s, oracle_or_guide, feats):
     """Given a sentence and a next transition predictor, parse the sentence."""
     c = initialize_configuration(s)
     while c.buffer:
-        c = disambiguate_buffer_front(c)  # todo not call it unless needed -- check before calling
+        c = disambiguate_buffer_front(c)
         tr = oracle_or_guide(c, feats)
         if tr.op == 'sh':
             c = shift(c)
@@ -1073,6 +1213,8 @@ if __name__ == '__main__':
                                                             "s0.pos b0.pos", "s0.form b0.pos", "b2.pos", "b3.pos",
                                                             "s0.lemma", "b0.lemma", "morph"])
 
+    # todo leave one parsing function to work with all cases
+    # todo create a separate runner for joint parsing in a different file
     # parse input file
     cwd = os.getcwd()
     counter = 1
