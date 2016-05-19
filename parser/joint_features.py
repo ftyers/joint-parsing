@@ -16,7 +16,13 @@ def extract_features(c, config=None): # todo remove as_dict from the whole parse
         """
         tags = []
         for token_group in tokens:  # a group is 1 or more tokens that constitute one analysis
-            group_tag = '|'.join(token.postag for token in token_group)
+            group_tags = []
+            for token in token_group:
+                tag = token.postag
+                if tag == '_':
+                    tag = token.cpostag
+                group_tags.append(tag)
+            group_tag = '|'.join(group_tags)
             tags.append(group_tag)
 
         return '||'.join(sorted(set(tags)))
@@ -29,7 +35,11 @@ def extract_features(c, config=None): # todo remove as_dict from the whole parse
 
     def pos_of_buffer_front():
         try:
-            return c.sentence[c.buffer[0]].postag
+            tag = c.sentence[c.buffer[0]].postag
+            if tag == '_':
+                return c.sentence[c.buffer[0]].cpostag
+            else:
+                return tag
         except AttributeError:
             return ambiguity_class(c.sentence[c.buffer[0]][1])
 
@@ -41,13 +51,19 @@ def extract_features(c, config=None): # todo remove as_dict from the whole parse
 
     def pos_of_stack_top():
         try:
-            return c.sentence[c.stack[-1]].postag
+            tag = c.sentence[c.stack[-1]].postag
+            if tag == '_':
+                return c.sentence[c.stack[-1]].cpostag
+            return tag
         except IndexError:
             return 'None'
 
     def pos_of_second_buffer_item():
         try:
-            return c.sentence[c.buffer[1]].postag
+            tag = c.sentence[c.buffer[1]].postag
+            if tag == '_':
+                return c.sentence[c.buffer[1]].cpostag
+            return tag
         except IndexError:
             return 'None'
         except AttributeError:
@@ -55,13 +71,18 @@ def extract_features(c, config=None): # todo remove as_dict from the whole parse
 
     def pos_of_second_stack_item():
         try:
-            return c.sentence[c.stack[-2]].postag
+            tag = c.sentence[c.stack[-2]].postag
+            if tag == '_':
+                return c.sentence[c.stack[-2]].cpostag
+            return tag
         except IndexError:
             return 'None'
 
     def pos_of_leftmost_dep_of_buffer_front():
         try:
             feature = c.sentence[min({arc for arc in c.arcs if arc.h == c.buffer[0]}, key=lambda arc: arc.d).d].postag
+            if feature == '_':
+                feature = c.sentence[min({arc for arc in c.arcs if arc.h == c.buffer[0]}, key=lambda arc: arc.d).d].cpostag
         except ValueError:
             feature = 'None'
         return feature
@@ -113,7 +134,10 @@ def extract_features(c, config=None): # todo remove as_dict from the whole parse
 
     def pos_buf2():
         try:
-            return c.sentence[c.buffer[2]].postag
+            tag = c.sentence[c.buffer[2]].postag
+            if tag == '_':
+                return c.sentence[c.buffer[2]].cpostag
+            return tag
         except IndexError:
             return 'None'
         except AttributeError:
@@ -121,7 +145,10 @@ def extract_features(c, config=None): # todo remove as_dict from the whole parse
 
     def pos_buf3():
         try:
-            return c.sentence[c.buffer[3]].postag
+            tag = c.sentence[c.buffer[3]].postag
+            if tag == '_':
+                return c.sentence[c.buffer[3]].cpostag
+            return tag
         except IndexError:
             return 'None'
         except AttributeError:
