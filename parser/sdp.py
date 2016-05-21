@@ -491,6 +491,42 @@ def load_model(clf_path, vec_path):
 
     return guide
 
+
+
+def load_tagging_model(clf_path, vec_path):
+    """
+    Load a pre-trained morphological tagging model.
+    Do not use load_model for tagging models; they
+    return different guide functions.
+    """
+    clf = joblib.load(clf_path)
+    vec = joblib.load(vec_path)
+
+    def guide(c, feats):
+        """
+        Given a Configuration and a set of training features, disambiguate buffer
+        front of this configuration and return a list of tokens that make up the
+        best analysis.
+        Assume buffer front is not empty and is in (SurfaceToken, [analyses]) format.
+        """
+        vector = vec.transform(extract_features(c, feats))
+        predicted_tags = sorted([i for i in zip(clf.best_estimator_.predict_proba(vector), clf.best_estimator_.classes_)], reverse=True)
+
+        # get a list of tags allowed for this configuration
+        possible_tags = get_morph_label(c).split('$')
+        index_of_best_tag = 0  # nothing found case
+
+        for tag in predicted_tags:
+            if tag in possible_tags:
+                index_of_best_tag = possible_tags.index(tag)
+                break
+
+        # return the analysis corresponding to the best tagset
+        analyses = c.sentence[c.buffer[0]][1]
+        return analyses[index_of_best_tag]
+
+    return guide
+
 # -----------------
 # Oracle
 
@@ -720,7 +756,7 @@ def test_get_arcs():
     assert get_arcs(S_1) == {Arc(2, 'subj', 1), Arc(0, 'root', 2), Arc(4, 'nmod', 3), Arc(2, 'obj', 4)}
 
 
-def disambiguate_buffer_front(c, guide=None):
+def disambiguate_buffer_front(c, guide=None, feats=None):
     """
     Given a configuration, check if buffer front needs disambiguation and perform it.
     :param guide: a disambiguating guide function obtained at training
@@ -731,9 +767,9 @@ def disambiguate_buffer_front(c, guide=None):
     if not guide:
         guide = morph_oracle
 
-    best_analysis = guide(c)
+    best_analysis = guide(c, feats)
     last_id = get_span_id(c.sentence[c.buffer[0]])
-    diff = last_id - best_analysis[-1].id
+    diff = last_id - best_analysis[-1].id  # difference between the old and the new number of tokens
 
     # make new sentence and buffer to match
     new_sentence = expand_sentence(c.sentence, best_analysis, diff)
@@ -789,6 +825,7 @@ def morph_oracle(c):
     """
     return c.sentence[c.buffer[0]][1][0]
 
+
 def enumerate_tokens(s, d):
     """
     In case a range token was interpreted as only part of the range,
@@ -815,9 +852,9 @@ def enumerate_tokens(s, d):
         except AttributeError:  # move an ambiguous token
             surface_token = item[0]
             try:
-                surface_id = int(surface_token.id)-1
+                surface_id = int(surface_token.id)-d
             except ValueError:
-                surface_id = '-'.join([str(int(j)-1) for j in surface_token.id.split('-')])
+                surface_id = '-'.join([str(int(j)-d) for j in surface_token.id.split('-')])
             new_surface_token = SurfaceToken(str(surface_id), surface_token.form)
             analyses = []
             for analysis in item[1]:
@@ -1087,23 +1124,25 @@ def train_morph_classifier(training_path, development_path, classifier, paramete
     clf = grid_search.GridSearchCV(classifier, parameters, cv=3, scoring='%s_weighted' % score, verbose=0)
     clf.fit(data, target)
 
-    print("Best parameters set found on development set:")
-    print()
-    print(clf.best_params_)
-    print()
-    print("Grid scores on development set:")
-    print()
-    for params, mean_score, scores in clf.grid_scores_:
-        print("%0.3f (+/-%0.03f) for %r"
-              % (mean_score, scores.std() * 2, params))
-    print()
+    # print("Best parameters set found on development set:")
+    # print()
+    # print(clf.best_params_)
+    # print()
+    # print("Grid scores on development set:")
+    # print()
+    # for params, mean_score, scores in clf.grid_scores_:
+    #     print("%0.3f (+/-%0.03f) for %r"
+    #           % (mean_score, scores.std() * 2, params))
+    # print()
     y_true, y_pred = target_test, clf.predict(data_test)
-    print(classification_report(y_true, y_pred))
-    print(clf.best_score_)
+    # print(classification_report(y_true, y_pred))
+    print('%.3f' % clf.best_score_, end='')
+    print('\t', end='')
+    print(clf.best_params_)
 
-    # fixme turn back on
-    # joblib.dump(clf, 'morph_model_for_%s.pkl' % (os.path.basename(training_path)))
-    # joblib.dump(vec, 'morph_vectorizer_for_%s.pkl' % (os.path.basename(training_path)))
+
+    joblib.dump(clf, 'morph_model_for_%s.pkl' % (os.path.basename(training_path)))
+    joblib.dump(vec, 'morph_vectorizer_for_%s.pkl' % (os.path.basename(training_path)))
 
     def guide(c, feats):  # todo test guide function
         """
@@ -1152,11 +1191,38 @@ def parse_with_feats(s, oracle_or_guide, feats):
     return c
 
 
+def joint_parse(s, parsing_guide, parsing_feats, tagging_guide, tagging_feats):
+    """
+    Jointly parse a sentence.
+    :param parsing_guide: a dependency parsing guide function obtained during training
+    :param parsing_feats: a list of features for dependency parsing
+    :param tagging_guide: a morphological tagging guide function
+    :param tagging_feats: a list of features for morphological tagging
+    """
+    c = initialize_configuration(s)
+    while c.buffer:
+        c = disambiguate_buffer_front(c, tagging_guide, tagging_feats)
+        tr = parsing_guide(c, parsing_feats)
+        if tr.op == 'sh':
+            c = shift(c)
+        elif tr.op == 'la':
+            try:
+                c = left_arc(c, tr.l)
+            except IndexError:
+                c = shift(c)
+        elif tr.op == 'ra':
+            try:
+                c = right_arc(c, tr.l)
+            except IndexError:
+                c = shift(c)
+    return c
+
+
 class AbsPath(argparse.Action):
 
     def __call__(self, parser, namespace, path, option_string=None):
-        # cwd = os.getcwd()
-        cwd = os.path.dirname(os.path.realpath(__file__))  # use for debugging and config launches
+        cwd = os.getcwd()
+        # cwd = os.path.dirname(os.path.realpath(__file__))  # use for debugging and config launches
         if not os.path.isabs(path):
             path = os.path.join(cwd, path)
         setattr(namespace, self.dest, path)
@@ -1205,36 +1271,66 @@ if __name__ == '__main__':
     else:
         print('Training the classifier...')
         # guide_function = train(args.train, args.development)
-        # fixme debugging the crazy decision tree
+        # fixme debugging the crazy decision tree -- make this the main function when cleaning up
         guide_function = train_with_classifier(args.train, args.development,
-                                               DecisionTreeClassifier(),
-                                               [{'criterion': ['gini'], 'splitter': ['random'], 'class_weight': [None]}],
-                                               ["b0.pos", "s0.pos", "b1.pos", "s1.pos", "ld(b0).pos",
-                                                            "s0.pos b0.pos", "s0.form b0.pos", "b2.pos", "b3.pos",
-                                                            "s0.lemma", "b0.lemma", "morph"])
+                                               # DecisionTreeClassifier(),
+                                               # [{'criterion': ['gini'], 'splitter': ['random'], 'class_weight': [None]}],
+                                               SGDClassifier(),
+                                               [{'alpha': [1e-05], 'average': [False], 'learning_rate': ['constant'],
+                                                 'eta0': [0.00390625], 'shuffle': [True], 'loss': ['hinge'], 'penalty':
+                                                     ['l2']}],
+                                               ['b0.form',
+                                                'b0.pos',
+                                                's0.form',
+                                                's0.pos',
+                                                'b1.pos',
+                                                's1.pos',
+                                                'ld(b0).pos',
+                                                's0.pos b0.pos',
+                                                's0.pos b0.form',
+                                                's0.form b0.pos',
+                                                's0.form b0.form',
+                                                'b1.form',
+                                                'b2.pos',
+                                                'b3.pos',
+                                                's0_head.form',
+                                                'morph'])
 
     # todo leave one parsing function to work with all cases
-    # todo create a separate runner for joint parsing in a different file
+    # todo create a separate runner for joint_parsing in a different file
     # parse input file
     cwd = os.getcwd()
     counter = 1
     print('Parsing sentences...')
     with open(os.path.join(cwd, args.output_file), 'w') as output_file:
 
-        gold_sentences = read_sentences('/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/puupankki.conllx_test')
-        lasses = []
+        # gold_sentences = read_sentences('/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/puupankki.conllx_test')
+        # lasses = []
         # for s in read_sentences(args.input_file):
         for s in read_conllz_for_joint(args.input_file):
             if counter % 20 == 0:
                 print('Parsing sentence %d' % counter)
-            final_config = parse_with_feats(s, guide_function, ["b0.pos", "s0.pos", "b1.pos", "s1.pos", "ld(b0).pos",
-                                                            "s0.pos b0.pos", "s0.form b0.pos", "b2.pos", "b3.pos",
-                                                            "s0.lemma", "b0.lemma", "morph"])
+            final_config = parse_with_feats(s, guide_function, ['b0.form',
+                                                                'b0.pos',
+                                                                's0.form',
+                                                                's0.pos',
+                                                                'b1.pos',
+                                                                's1.pos',
+                                                                'ld(b0).pos',
+                                                                's0.pos b0.pos',
+                                                                's0.pos b0.form',
+                                                                's0.form b0.pos',
+                                                                's0.form b0.form',
+                                                                'b1.form',
+                                                                'b2.pos',
+                                                                'b3.pos',
+                                                                's0_head.form',
+                                                                'morph'])
             output_file.write(s2conll(c2s(final_config)) + '\n')
             counter += 1
 
             parsed_sentence = c2s(final_config)
-            gold_sentence = next(gold_sentences)
-            lasses.append(las(parsed_sentence, gold_sentence[1:]))
+            # gold_sentence = next(gold_sentences)
+            # lasses.append(las(parsed_sentence, gold_sentence[1:]))
         #
-        print('LAS: %.3f' % float(sum(lasses)/len(lasses)))
+        # print('LAS: %.3f' % float(sum(lasses)/len(lasses)))
