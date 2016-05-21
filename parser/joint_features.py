@@ -200,7 +200,7 @@ def extract_features(c, config=None): # todo remove as_dict from the whole parse
         try:
             for arc in c.arcs:
                 if arc.d == c.stack[-1]:
-                    return arc.h.form
+                    return c.sentence[arc.h].form
         except IndexError:
             return 'None'
         return 'None'
