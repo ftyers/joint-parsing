@@ -1,0 +1,1036 @@
+1	Сот	сот	_	n	nom	2	nmod:poss	_	_
+2	билігі	билік	_	n	px3sp|nom	9	subj	_	_
+3	сот	сот	_	n	nom	4	nmod:poss	_	_
+4	ісін	іс	_	n	px3sp|acc	5	obj	_	_
+5	жүргізудің	жүргіз	_	v	tv|ger|gen	9	ccomp	_	_
+6	заңмен	заң	_	n	ins	7	nmod	_	_
+7	белгіленген	белгіле	_	v	tv|pass|gpr_past	9	advcl	_	_
+8	түрінде	түр	_	n	px3sp|loc	9	nmod	_	_
+9	жүзеге асырылады	жүзеге асырыл	_	v	iv|aor|p3|sg	0	root	_	_
+10	.	.	_	sent	_	9	punct	_	_
+
+1	Ата-аналардың	ата-ана	_	n	pl|gen	8	subj	_	_
+2	өздерінің	өз	_	prn	ref|px3pl|gen	8	subj	_	_
+3	жас	жас	_	adj	_	4	amod	_	_
+4	балаларына	бала	_	n	pl|px3sp|dat	8	nmod	_	_
+5	білім	білім	_	n	nom	6	obj	_	_
+6	беру	бер	_	v	tv|ger|nom	7	acl	_	_
+7	түрін	түр	_	n	px3sp|acc	8	obj	_	_
+8	таңдауда	таңда	_	v	tv|ger|loc	10	advcl	_	_
+9	құқығы	құқық	_	n	px3sp|nom	10	subj	_	_
+10	басымды	басымды	_	adj	_	0	root	_	_
+11	басымды	е	_	cop	aor|p3|sg	10	cop	_	_
+12	.	.	_	sent	_	10	punct	_	_
+
+1	Хұзыстан	Хұзыстан	_	np	top|nom	4	conj	_	_
+2	,	,	_	cm	_	4	punct	_	_
+3	Курдстан	Курдстан	_	np	top|nom	4	nmod:poss	_	_
+4	жартастарындағы	жартас	_	n	pl|px3sp|loc|attr	8	nmod	_	_
+5	рельефтер	рельеф	_	n	pl|nom	8	subj	_	_
+6	,	,	_	cm	_	8	punct	_	_
+7	Сұзыдан	*Сұзыдан	_	unk	_	8	cc	_	_
+8	табылған	тап	_	v	tv|pass|past|p3|sg	22	advcl	_	_
+9	,	,	_	cm	_	8	punct	_	_
+10	асыл	асыл	_	adj	_	11	amod	_	_
+11	металдан	метал	_	n	abl	12	nmod	_	_
+12	жасалған	жаса	_	v	tv|pass|gpr_past	22	advcl	_	_
+13	көркем	көркем	_	adj	_	14	amod	_	_
+14	заттар	зат	_	n	pl|nom	16	subj	_	_
+15	Иран	Иран	_	np	top|nom	16	subj	_	_
+16	өнерінің	өн	_	v	iv|ger_fut|px3sp|gen	22	advcl	_	_
+17	өз	өз	_	det	ref	18	det	_	_
+18	заманында	заман	_	n	px3sp|loc	21	nmod	_	_
+19	жоғары	жоғары	_	adj	_	20	amod	_	_
+20	дәрежеде	дәреже	_	n	loc	21	nmod	_	_
+21	болғанын	бол	_	v	iv|gpr_past|subst|px3sp|acc	22	advcl	_	_
+22	дәлелдейді	дәлелде	_	v	tv|aor|p3|sg	0	root	_	_
+23	.	.	_	sent	_	22	punct	_	_
+
+1	Турасын	тура	_	adj	subst|px3sp|acc	17	obj	_	_
+2	ойлағанда	ойла	_	v	tv|ger_past|loc	17	conj	_	_
+3	,	,	_	cm	_	17	punct	_	_
+4	балаңа	бала	_	n	px2sg|dat	6	nmod	_	_
+5	қатын	қатын	_	n	nom	6	obj	_	_
+6	әперме	әпер	_	v	tv|neg|imp|p2|sg	17	conj	_	_
+7	,	,	_	cm	_	17	punct	_	_
+8	енші	енші	_	n	nom	9	obj	_	_
+9	берме	бер	_	v	tv|neg|imp|p2|sg	17	conj	_	_
+10	,	,	_	cm	_	17	punct	_	_
+11	барыңды	бар	_	n	px2sg|acc	12	obj	_	_
+12	салсаң да	сал	_	v	tv|gna_cond|p2|sg	17	advcl	_	_
+13	салсаң да	да	_	postadv	_	12	advmod	_	_
+14	,	,	_	cm	_	12	punct	_	_
+15	орыстың	орыс	_	n	gen	16	nmod:poss	_	_
+16	ғылымын	ғылым	_	n	px3sp|acc	17	obj	_	_
+17	үйрет	үйрет	_	v	tv|imp|p2|sg	0	root	_	_
+18	!	!	_	sent	_	17	punct	_	_
+
+1	Елде	ел	_	n	loc	5	nmod	_	_
+2	нарықтық	нарықтық	_	adj	_	3	amod	_	_
+3	қатынастар	қатынас	_	n	pl|nom	5	subj	_	_
+4	тез	тез	_	adv	_	5	advmod	_	_
+5	дами	дамы	_	v	iv|prc_impf	0	root	_	_
+6	бастады	баста	_	vaux	ifi|p3|sg	5	aux	_	_
+7	.	.	_	sent	_	5	punct	_	_
+
+1	XX	XX	_	num	ord	7	subj	_	_
+2	ғасырда	ғасыр	_	n	loc	7	nmod	_	_
+3	қала	қала	_	n	nom	4	nmod:poss	_	_
+4	тарихының	тарих	_	n	px3sp|gen	6	nmod:poss	_	_
+5	жаңа	жаңа	_	adj	_	6	amod	_	_
+6	кезеңі	кезең	_	n	px3sp|nom	7	subj	_	_
+7	басталды	баста	_	v	tv|pass|ifi|p3|sg	0	root	_	_
+8	.	.	_	sent	_	7	punct	_	_
+
+1	Орыс	орыс	_	n	nom	3	conj	_	_
+2	және	және	_	cnjcoo	_	3	cc	_	_
+3	украин	украин	_	n	nom	4	nmod:poss	_	_
+4	тілдерін	тіл	_	n	pl|px3sp|acc	5	obj	_	_
+5	біледі	біл	_	v	tv|aor|p3|sg	0	root	_	_
+6	.	.	_	sent	_	5	punct	_	_
+
+1	Зарарынан	зарар	_	n	px3sp|abl	14	advmod	_	_
+2	қашық	қашық	_	adj	_	14	subj	_	_
+3	болуға	бол	_	v	iv|ger|dat	2	cop	_	_
+4	,	,	_	cm	_	8	punct	_	_
+5	пайдасына	пайда	_	n	px3sp|dat	8	nmod	_	_
+6	ортақ	ортақ	_	adj	_	8	cc	_	_
+7	болуға	бол	_	v	iv|ger|dat	6	cop	_	_
+8	тілін	тіл	_	v	tv|pass|imp|p2|sg	13	conj	_	_
+9	,	,	_	cm	_	13	punct	_	_
+10	оқуын	оқы	_	v	iv|ger|px3sp|acc	13	conj	_	_
+11	,	,	_	cm	_	13	punct	_	_
+12	ғылымын	ғылым	_	n	px3sp|acc	13	obj	_	_
+13	білмек	біл	_	v	tv|prc_fplan	2	csubj	_	_
+14	керек	керек	_	adj	_	0	root	_	_
+15	керек	е	_	cop	aor|p3|sg	14	cop	_	_
+16	.	.	_	sent	_	14	punct	_	_
+
+1	Ауылда	ауыл	_	n	loc	4	nmod	_	_
+2	клуб	клуб	_	n	nom	3	nmod:poss	_	_
+3	директоры	директор	_	n	px3sp|nom	4	subj	_	_
+4	болып	бол	_	v	iv|gna_perf	6	advcl	_	_
+5	қызмет	қызмет	_	n	nom	6	obj	_	_
+6	атқарды	атқар	_	v	tv|ifi|p3|sg	0	root	_	_
+7	.	.	_	sent	_	6	punct	_	_
+
+1	Күшіктен	күшік	_	n	abl	4	nmod	_	_
+2	"	"	_	sent	_	4	punct	_	_
+3	Азаматты	Азамат	_	np	ant|m|acc	4	obj	_	_
+4	көрдің бе	көр	_	v	tv|ifi|p2|sg	8	ccomp	_	_
+5	көрдің бе	ма	_	qst	_	4	disc	_	_
+6	?	?	_	sent	_	4	punct	_	_
+7	"	"	_	sent	_	4	punct	_	_
+8	деп	де	_	v	tv|gna_perf	9	advcl	_	_
+9	сұрайды	сұра	_	v	tv|aor|p3|sg	0	root	_	_
+10	.	.	_	sent	_	9	punct	_	_
+
+1	Президент	президент	_	n	nom	0	_	_	_
+2	(	(	_	lpar	_	0	_	_	_
+3	1997	1997	_	num	_	4	amod	_	_
+4	жылдан	жыл	_	n	abl	5	nmod	_	_
+5	бастап	баста	_	v	tv|gna_perf	0	_	_	_
+6	Сейд	*Сейд	_	unk	_	0	_	_	_
+7	Мохаммед	Мохаммед	_	np	ant|m|nom	0	_	_	_
+8	Хатами	*Хатами	_	unk	_	0	_	_	_
+9	)	)	_	rpar	_	0	_	_	_
+10	4	4	_	num	_	11	nummod	_	_
+11	жылға	жыл	_	n	dat	12	nmod	_	_
+12	сайланады	сайла	_	v	tv|pass|aor|p3|sg	16	conj	_	_
+13	және	және	_	cnjcoo	_	16	cc	_	_
+14	Министр	министр	_	n	nom	15	nmod:poss	_	_
+15	Кабинетін	кабинет	_	n	px3sp|acc	16	obj	_	_
+16	басқарады	басқар	_	v	tv|aor|p3|sg	9	csubj	_	_
+17	.	.	_	sent	_	9	punct	_	_
+
+1	Мүмкін	мүмкін	_	adj	_	2	amod	_	_
+2	бұл	бұл	_	det	dem	3	det	_	_
+3	Азамат шығар	Азамат	_	np	ant|m|nom	0	_	_	_
+4	Азамат шығар	е	_	cop	aor|p3|sg	3	cop	_	_
+5	Азамат шығар	шығар	_	mod	_	0	_	_	_
+6	?	?	_	sent	_	0	_	_	_
+
+1	Намыс	намыс	_	n	nom	2	obj	_	_
+2	қылып	қыл	_	v	tv|gna_perf	5	advcl	_	_
+3	балаға	бала	_	n	dat	5	nmod	_	_
+4	мойын	мойын	_	n	nom	5	obj	_	_
+5	бұрды	бұр	_	v	tv|ifi|p3|sg	0	root	_	_
+6	.	.	_	sent	_	5	punct	_	_
+
+1	Жақсы	жақсы	_	adj	_	2	amod	_	_
+2	атаның	ата	_	n	gen	3	nmod:poss	_	_
+3	балалары да	бала	_	n	pl|px3sp|nom	12	subj	_	_
+4	балалары да	да	_	cnjcoo	_	12	cc	_	_
+5	көп	көп	_	adv	_	6	advmod	_	_
+6	оқыған жоқ	оқы	_	v	tv|neg|ifi|p3|sg	12	conj	_	_
+7	,	,	_	cm	_	12	punct	_	_
+8	қайта	қайта	_	adv	_	12	advmod	_	_
+9	кедейдің	кедей	_	n	gen	10	nmod:poss	_	_
+10	баласын	бала	_	n	px3sp|acc	12	obj	_	_
+11	орысқа	орыс	_	n	dat	12	nmod	_	_
+12	қорлап	қорла	_	v	tv|prc_perf	0	root	_	_
+13	берді	бер	_	vaux	ifi|p3|sg	12	aux	_	_
+14	.	.	_	sent	_	12	punct	_	_
+
+1	Сасани	*Сасани	_	unk	_	3	subj	_	_
+2	әулеті	әулет	_	n	px3sp|nom	3	nmod:poss	_	_
+3	дәуірінде	дәуір	_	n	px3sp|loc	12	nmod	_	_
+4	дәуірінде	е	_	cop	aor|p3|sg	3	cop	_	_
+5	(	(	_	lpar	_	9	punct	_	_
+6	3	3	_	num	_	8	cmpnd	_	_
+7	—	—	_	guio	_	8	punct	_	_
+8	7	7	_	num	_	9	amod	_	_
+9	ғасырлар	ғасыр	_	n	pl|nom	3	appos	_	_
+10	)	)	_	rpar	_	9	punct	_	_
+11	қалаларды	қала	_	n	pl|acc	12	obj	_	_
+12	қорған	қор	_	v	iv|gpr_past	0	_	_	_
+13	ішіне	іш	_	n	px3sp|dat	17	nmod	_	_
+14	жүйелі	жүйелі	_	adj	_	15	amod	_	_
+15	жоба	жоба	_	n	nom	17	obj	_	_
+16	бойынша	бойынша	_	post	_	15	case	_	_
+17	салу	сал	_	v	tv|ger|nom	0	_	_	_
+18	қанат	қанат	_	n	nom	19	obj	_	_
+19	жайды	жай	_	v	tv|ifi|p3|sg	0	_	_	_
+20	(	(	_	lpar	_	21	punct	_	_
+21	мыс.	мыс.	_	abbr	_	0	_	_	_
+22	,	,	_	cm	_	21	punct	_	_
+23	Нишапур	Нишапур	_	np	top|nom	24	nmod:poss	_	_
+24	қаласы	қала	_	n	px3sp|nom	27	subj	_	_
+25	шахмат	шахмат	_	n	nom	26	nmod:poss	_	_
+26	жүйесімен	жүйе	_	n	px3sp|ins	27	nmod	_	_
+27	салынған	сал	_	v	tv|pass|gpr_past	21	csubj	_	_
+28	)	)	_	rpar	_	0	_	_	_
+29	.	.	_	sent	_	0	_	_	_
+
+1	Қазірде	қазір	_	n	loc	3	nmod	_	_
+2	орыстан	орыс	_	n	abl	3	nmod	_	_
+3	оқыған	оқы	_	v	iv|gpr_past	4	acl	_	_
+4	балалардан	бала	_	n	pl|abl	6	nmod	_	_
+5	артық	артық	_	post	_	4	case	_	_
+6	жақсы	жақсы	_	adj	_	7	amod	_	_
+7	кісі	кісі	_	n	nom	8	subj	_	_
+8	шыға	шық	_	v	iv|prc_impf	0	_	_	_
+9	алмай да	ал	_	vaux	neg|prc_impf	8	aux	_	_
+10	алмай да	да	_	cnjcoo	_	0	_	_	_
+11	тұр	тұр	_	vaux	pres|p3|sg	10	aux	_	_
+12	.	.	_	sent	_	10	punct	_	_
+
+1	Арабтар	араб	_	n	pl|nom	10	subj	_	_
+2	жаулап алғаннан	жаулап ал	_	v	tv|ger_past|abl	10	advcl	_	_
+3	кейін	кейін	_	post	_	2	case	_	_
+4	Иран	Иран	_	np	top|nom	5	nmod:poss	_	_
+5	музыкасына	музыка	_	n	px3sp|dat	10	nmod	_	_
+6	мұсылмандық	мұсылмандық	_	adj	_	7	amod	_	_
+7	араб	араб	_	n	nom	8	nmod:poss	_	_
+8	мәдениетінің	мәдениет	_	n	px3sp|gen	9	nmod:poss	_	_
+9	ықпалы	ықпал	_	n	px3sp|nom	10	subj	_	_
+10	тиді	ти	_	v	iv|ifi|p3|sg	0	root	_	_
+11	.	.	_	sent	_	10	punct	_	_
+
+1	Ерназардың	Ерназар	_	np	top|gen	2	nmod:poss	_	_
+2	өзі	өз	_	prn	ref|px3sp|nom	0	_	_	_
+3	бай	бай	_	adj	_	0	_	_	_
+4	болыпты	бол	_	v	iv|ifi|evid|p3|sg	3	cop	_	_
+5	.	.	_	sent	_	3	punct	_	_
+
+1	Не	не	_	cnjcoo	_	2	cc	_	_
+2	қылса да	қыл	_	v	tv|gna_cond|p3|sg	6	advcl	_	_
+3	қылса да	да	_	postadv	_	2	advmod	_	_
+4	сөзді	сөз	_	n	acc	5	obj	_	_
+5	ұқтырса	ұқтыр	_	v	tv|gna_cond|p3|sg	6	advcl	_	_
+6	болады	бол	_	v	iv|aor|p3|sg	0	_	_	_
+7	оларға	ол	_	prn	dem|pl|dat	0	_	_	_
+8	.	.	_	sent	_	0	_	_	_
+
+1	Халықтың	халық	_	n	gen	2	nmod:poss	_	_
+2	тұрмысы	тұрмыс	_	n	px3sp|nom	7	subj	_	_
+3	нашарлап	нашарла	_	v	iv|gna_perf	7	advcl	_	_
+4	,	,	_	cm	_	3	punct	_	_
+5	елде	ел	_	n	loc	7	nmod	_	_
+6	толқулар	толқу	_	n	pl|nom	7	subj	_	_
+7	басталды	баста	_	v	tv|pass|ifi|p3|sg	0	root	_	_
+8	.	.	_	sent	_	7	punct	_	_
+
+1	Өріс	өріс	_	n	nom	2	subj	_	_
+2	толған	тол	_	v	iv|gpr_past	3	acl	_	_
+3	жылқылары	жылқы	_	n	pl|px3sp|nom	4	subj	_	_
+4	болыпты	бол	_	v	iv|ifi|evid|p3|sg	0	root	_	_
+5	.	.	_	sent	_	4	punct	_	_
+
+1	Жер	жер	_	n	nom	2	nmod:poss	_	_
+2	бетінде	бет	_	n	px3sp|loc	5	nmod	_	_
+3	мұндай	бұл	_	prn	dem|sim|nom	5	nmod	_	_
+4	ормандар	орман	_	n	pl|nom	5	nmod	_	_
+5	қалмайды	қал	_	v	iv|neg|aor|p3|sg	0	root	_	_
+6	.	.	_	sent	_	5	punct	_	_
+
+1	Кафедра	кафедра	_	n	nom	0	_	_	_
+2	«	«	_	lquot	_	0	_	_	_
+3	Менеджмент	менеджмент	_	n	nom	8	subj	_	_
+4	»	»	_	rquot	_	3	punct	_	_
+5	мамандық	мамандық	_	n	nom	8	subj	_	_
+6	бойынша	бойынша	_	post	_	5	case	_	_
+7	бакалавр	бакалавр	_	n	nom	8	obj	_	_
+8	дайындайды	дайында	_	v	tv|aor|p3|sg	2	csubj	_	_
+9	.	.	_	sent	_	2	punct	_	_
+
+1	Балаларды	бала	_	n	pl|acc	2	obj	_	_
+2	оқытқан да	оқыт	_	v	tv|ger_past|nom	0	_	_	_
+3	оқытқан да	да	_	cnjcoo	_	0	_	_	_
+4	жақсы	жақсы	_	adj	_	0	_	_	_
+5	жақсы	е	_	cop	aor|p3|sg	4	cop	_	_
+6	,	,	_	cm	_	17	punct	_	_
+7	бірақ	бірақ	_	cnjcoo	_	17	cc	_	_
+8	құлшылық	құлшылық	_	n	nom	9	obj	_	_
+9	қыларлық қана	қыл	_	v	tv|gpr_ppot|nom	13	conj	_	_
+10	қыларлық қана	ғана	_	postadv	_	9	advmod	_	_
+11	,	,	_	cm	_	13	punct	_	_
+12	түркі	түркі	_	adj	_	13	cc	_	_
+13	танырлық қана	таны	_	v	tv|gpr_ppot|nom	17	advcl	_	_
+14	танырлық қана	ғана	_	postadv	_	13	advmod	_	_
+15	таза	таза	_	adj	advl	16	advmod	_	_
+16	оқытса	оқыт	_	v	tv|gna_cond|p3|sg	17	advcl	_	_
+17	болады	бол	_	v	iv|aor|p3|sg	4	cop	_	_
+18	.	.	_	sent	_	4	punct	_	_
+
+1	Футболдан	футбол	_	n	abl	0	_	_	_
+2	әлем	әлем	_	n	nom	3	nmod:poss	_	_
+3	чемпионаты	чемпионат	_	n	px3sp|nom	0	_	_	_
+4	2014	2014	_	num	_	6	amod	_	_
+5	—	—	_	guio	_	6	punct	_	_
+6	ФИФА-ның	ФИФА	_	np	org|gen	0	_	_	_
+7	20-шы	20	_	num	ord	0	_	_	_
+8	футболдан	футбол	_	n	abl	0	_	_	_
+9	әлем	әлем	_	n	nom	10	nmod:poss	_	_
+10	чемпионаты	чемпионат	_	n	px3sp|nom	0	_	_	_
+11	,	,	_	cm	_	0	_	_	_
+12	финалдық	финалдық	_	adj	_	13	amod	_	_
+13	кезеңі	кезең	_	n	px3sp|nom	0	_	_	_
+14	2014	2014	_	num	_	15	amod	_	_
+15	жылдың	жыл	_	n	gen	0	_	_	_
+16	12	12	_	num	_	17	nummod	_	_
+17	маусым	маусым	_	n	nom	24	subj	_	_
+18	мен	мен	_	prn	pers|p1|sg|nom	24	subj	_	_
+19	13	13	_	num	_	20	amod	_	_
+20	шілде	шіл	_	n	loc	21	nmod:poss	_	_
+21	күндері	күн	_	n	pl|px3sp|nom	24	subj	_	_
+22	аралығында	аралық	_	n	px3sp|loc	24	nmod	_	_
+23	Бразилияда	Бразилия	_	np	top|loc	24	nmod	_	_
+24	өтті	өт	_	v	tv|ifi|p3|sg	0	_	_	_
+25	.	.	_	sent	_	24	punct	_	_
+
+1	Баяғыда	баяғыда	_	adv	_	13	advmod	_	_
+2	біреу	біреу	_	num	coll|advl	4	subj	_	_
+3	той	той	_	n	nom	4	obj	_	_
+4	жасапты	жаса	_	v	tv|ifi|evid|p3|sg	13	conj	_	_
+5	,	,	_	cm	_	13	punct	_	_
+6	тойға	той	_	n	dat	9	nmod	_	_
+7	көп	көп	_	adj	_	8	amod	_	_
+8	кісі	кісі	_	n	nom	9	subj	_	_
+9	жиналыпты	жинал	_	v	iv|ifi|evid|p3|sg	13	conj	_	_
+10	,	,	_	cm	_	13	punct	_	_
+11	Қожа да	Қожа	_	np	ant|m|nom	13	subj	_	_
+12	Қожа да	да	_	cnjcoo	_	13	cc	_	_
+13	келіпті	кел	_	v	iv|ifi|evid|p3|sg	0	root	_	_
+14	.	.	_	sent	_	13	punct	_	_
+
+1	Кейінірек	кейінірек	_	adv	_	6	advmod	_	_
+2	ФИФА	ФИФА	_	np	org|nom	5	subj	_	_
+3	ротация	ротация	_	n	nom	4	nmod:poss	_	_
+4	принципі	принцип	_	n	px3sp|nom	5	subj	_	_
+5	өзгеретінін	өзгер	_	v	iv|ger_impf|px3sp|acc	6	advcl	_	_
+6	жариялады	жарияла	_	v	tv|ifi|p3|sg	0	root	_	_
+7	.	.	_	sent	_	6	punct	_	_
+
+1	Сән	сән	_	n	nom	3	conj	_	_
+2	және	және	_	cnjcoo	_	3	cc	_	_
+3	қосалқы	қосалқы	_	adj	_	4	amod	_	_
+4	өнердің	өнер	_	n	gen	6	nmod:poss	_	_
+5	дәстүрлі	дәстүрлі	_	adj	_	6	amod	_	_
+6	түрлері	түр	_	n	pl|px3sp|nom	7	subj	_	_
+7	сақталған	сақтал	_	v	iv|past|p3|sg	0	root	_	_
+8	.	.	_	sent	_	7	punct	_	_
+
+1	Соны	сол	_	prn	dem|acc	2	obj	_	_
+2	үйренейін	үйрен	_	v	tv|opt|p1|sg	10	advcl	_	_
+3	,	,	_	cm	_	2	punct	_	_
+4	не	не	_	cnjcoo	_	6	punct	_	_
+5	балама	бала	_	n	px1sg|dat	6	nmod	_	_
+6	үйретейін	үйрет	_	v	tv|opt|p1|sg	7	advcl	_	_
+7	деп	де	_	v	tv|gna_perf	10	advcl	_	_
+8	ойына	ой	_	n	px3sp|dat	10	nmod	_	_
+9	жақсы	жақсы	_	adv	_	10	advmod	_	_
+10	түседі	түс	_	v	iv|aor|p3|sg	0	root	_	_
+11	.	.	_	sent	_	10	punct	_	_
+
+1	Мал	мал	_	n	nom	2	ccomp	_	_
+2	тапса	тап	_	v	tv|gna_cond|p3|sg	5	advcl	_	_
+3	,	,	_	cm	_	2	punct	_	_
+4	қарын	қарын	_	n	nom	5	subj	_	_
+5	тояды	той	_	v	iv|aor|p3|sg	0	root	_	_
+6	.	.	_	sent	_	5	punct	_	_
+
+1	Ұрыны	ұры	_	n	acc	2	obj	_	_
+2	ұстаңдар	ұста	_	v	tv|imp|p2|pl	0	root	_	_
+3	.	.	_	sent	_	2	punct	_	_
+
+1	"	"	_	sent	_	0	_	_	_
+2	Жоқ	жоқ	_	ij	_	0	_	_	_
+3	,	,	_	cm	_	2	punct	_	_
+4	Айгүл	Айгүл	_	np	ant|f|nom	6	obj	_	_
+5	,	,	_	cm	_	4	punct	_	_
+6	айта	айт	_	v	tv|prc_impf	9	ccomp	_	_
+7	алмаймын	ал	_	vaux	neg|aor|p1|sg	6	aux	_	_
+8	"	"	_	sent	_	6	punct	_	_
+9	деп	де	_	v	tv|gna_perf	11	advcl	_	_
+10	анасы	ана	_	n	px3sp|nom	11	subj	_	_
+11	жауап береді	жауап бер	_	v	iv|aor|p3|sg	2	csubj	_	_
+12	.	.	_	sent	_	2	punct	_	_
+
+1	Сөйтіп	сөйтіп	_	adv	_	0	_	_	_
+2	,	,	_	cm	_	1	punct	_	_
+3	Алашордасының	Алашорда	_	np	top|px3sp|gen	4	nmod:poss	_	_
+4	бастығына	бастық	_	n	px3sp|dat	0	_	_	_
+5	Ғ.	Ғ.	_	abbr	_	0	_	_	_
+6	Бөкейхан	Бөкейхан	_	np	ant|m|nom	7	subj	_	_
+7	сайланды	сайла	_	v	tv|pass|ifi|p3|sg	5	csubj	_	_
+8	.	.	_	sent	_	5	punct	_	_
+
+1	Халқы	халық	_	n	px3sp|nom	4	subj	_	_
+2	65,2	65,2	_	num	_	3	nummod	_	_
+3	млн.	млн.	_	n	nom	4	subj	_	_
+4	адам	адам	_	n	nom	0	root	_	_
+5	адам	е	_	cop	aor|p3|sg	4	cop	_	_
+6	(	(	_	lpar	_	7	punct	_	_
+7	1999	1999	_	num	_	4	appos	_	_
+8	)	)	_	rpar	_	7	punct	_	_
+9	.	.	_	sent	_	4	punct	_	_
+
+1	Онан	ол	_	prn	dem|abl	6	advmod	_	_
+2	соң	соң	_	post	_	1	case	_	_
+3	білім	білім	_	n	nom	6	advmod	_	_
+4	түгіл	түгіл	_	cnjcoo	_	6	cc	_	_
+5	өнер	өн	_	v	iv|gpr_fut	4	cop	_	_
+6	керек	керек	_	adj	_	0	root	_	_
+7	екен	е	_	cop	aor|evid|p3|sg	6	cop	_	_
+8	.	.	_	sent	_	6	punct	_	_
+
+1	Азамат	Азамат	_	np	ant|m|nom	0	_	_	_
+2	пен	мен	_	cnjcoo	_	0	_	_	_
+3	Айгүл	Айгүл	_	np	ant|f|nom	4	subj	_	_
+4	бақшада	бақша	_	n	loc	0	_	_	_
+5	бақшада	е	_	cop	aor|p3|sg	4	cop	_	_
+6	.	.	_	sent	_	4	punct	_	_
+
+1	Маған	мен	_	prn	pers|p1|sg|dat	3	nmod	_	_
+2	дәрігер	дәрігер	_	n	nom	3	subj	_	_
+3	керек	керек	_	adj	_	0	root	_	_
+4	керек	е	_	cop	aor|p3|sg	3	cop	_	_
+5	.	.	_	sent	_	3	punct	_	_
+
+1	Қожанасырдың	Қожанасыр	_	np	ant|m|gen	2	nmod:poss	_	_
+2	үстіндегі	үст	_	n	px3sp|loc|attr	3	nmod:poss	_	_
+3	киімі	киім	_	n	px3sp|nom	4	subj	_	_
+4	жаман	жаман	_	adj	_	0	root	_	_
+5	екен	е	_	cop	aor|evid|p3|sg	4	cop	_	_
+6	.	.	_	sent	_	4	punct	_	_
+
+1	Кірді	кір	_	v	iv|ifi|p3|sg	3	conj	_	_
+2	,	,	_	cm	_	1	punct	_	_
+3	шықты	шық	_	n	acc	5	obj	_	_
+4	,	,	_	cm	_	3	punct	_	_
+5	ілді	іл	_	v	tv|ifi|p3|sg	7	advcl	_	_
+6	,	,	_	cm	_	5	punct	_	_
+7	қайтты	қайт	_	v	iv|ifi|p3|sg	13	advcl	_	_
+8	,	,	_	cm	_	7	punct	_	_
+9	түбегейлеп	түбегейлеп	_	adv	_	10	advmod	_	_
+10	қуған	қу	_	v	tv|gpr_past	11	acl	_	_
+11	бала да	бала	_	n	nom	13	subj	_	_
+12	бала да	да	_	cnjcoo	_	13	cc	_	_
+13	жоқ	жоқ	_	adj	subst|nom	0	root	_	_
+14	жоқ	е	_	cop	aor|p3|sg	13	cop	_	_
+15	.	.	_	sent	_	13	punct	_	_
+
+1	Қалыңыз	қал	_	n	px2sg|frm|nom	2	subj	_	_
+2	қалай	қалай	_	adv	itg	0	root	_	_
+3	қалай	е	_	cop	aor|p3|sg	2	cop	_	_
+4	?	?	_	sent	_	2	punct	_	_
+
+1	Сен	сен	_	prn	pers|p2|sg|nom	9	subj	_	_
+2	оның	ол	_	prn	dem|gen	3	nmod:poss	_	_
+3	тілін	тіл	_	n	px3sp|acc	4	obj	_	_
+4	білсең	біл	_	v	tv|gna_cond|p2|sg	9	advcl	_	_
+5	,	,	_	cm	_	4	punct	_	_
+6	көкірек	көкірек	_	n	nom	9	subj	_	_
+7	-	-	_	guio	_	8	punct	_	_
+8	көзің	көз	_	n	px2sg|nom	9	subj	_	_
+9	ашылады	аш	_	v	tv|pass|aor|p3|sg	0	root	_	_
+10	.	.	_	sent	_	9	punct	_	_
+
+1	КСРО	КСРО	_	np	top|nom	7	subj	_	_
+2	Мемлекеттік	мемлекеттік	_	adj	_	3	amod	_	_
+3	сыйлығына	сыйлық	_	n	px3sp|dat	7	nmod	_	_
+4	(	(	_	lpar	_	5	punct	_	_
+5	1952	1952	_	num	_	3	appos	_	_
+6	)	)	_	rpar	_	5	punct	_	_
+7	ие болды	ие бол	_	v	iv|ifi|p3|sg	0	root	_	_
+8	.	.	_	sent	_	7	punct	_	_
+
+1	Астанаға	астана	_	n	dat	0	_	_	_
+2	билет	билет	_	n	nom	0	_	_	_
+3	қанша	қанша	_	num	itg	0	_	_	_
+4	тұрады	тұр	_	v	iv|aor|p3|sg	0	_	_	_
+5	?	?	_	sent	_	0	_	_	_
+
+1	Ол	ол	_	prn	pers|p3|sg|nom	6	subj	_	_
+2	енді	енді	_	adv	_	6	advmod	_	_
+3	ол	ол	_	prn	pers|p3|sg|nom	6	subj	_	_
+4	дыбысты	дыбыс	_	n	acc	6	obj	_	_
+5	анығырақ	анық	_	adj	comp|advl	6	subj	_	_
+6	ести	есті	_	v	tv|prc_impf	0	root	_	_
+7	бастады	баста	_	vaux	ifi|p3|sg	6	aux	_	_
+8	.	.	_	sent	_	6	punct	_	_
+
+1	Циклдық	циклдық	_	adj	_	2	amod	_	_
+2	жұмыссыздық	жұмыссыздық	_	n	nom	6	subj	_	_
+3	-	-	_	guio	_	4	punct	_	_
+4	өндірістің	өндіріс	_	n	gen	5	nmod:poss	_	_
+5	құлдырауынан	құлдыра	_	v	iv|ger|px3sp|abl	6	ccomp	_	_
+6	туындайды	туында	_	v	iv|aor|p3|sg	0	root	_	_
+7	.	.	_	sent	_	6	punct	_	_
+
+1	Осында	осы	_	prn	dem|loc	6	nmod	_	_
+2	орыс	орыс	_	n	nom	3	nmod:poss	_	_
+3	тілінде	тіл	_	n	px3sp|loc	4	nmod	_	_
+4	сөйлейтін	сөйле	_	v	tv|gpr_impf	5	acl	_	_
+5	адам	адам	_	n	nom	6	subj	_	_
+6	бар ма	бар	_	n	nom	0	root	_	_
+7	бар ма	е	_	cop	aor|p3|sg	6	cop	_	_
+8	бар ма	ма	_	qst	_	6	disc	_	_
+9	?	?	_	sent	_	6	punct	_	_
+
+1	Әлі де болса	әлі де болса	_	adv	_	4	advmod	_	_
+2	Азаматты	Азамат	_	np	ant|m|acc	4	obj	_	_
+3	табуға	тап	_	v	tv|ger|dat	4	ccomp	_	_
+4	әрекет етіп	әрекет ет	_	v	iv|prc_perf	0	root	_	_
+5	жүр	жүр	_	vaux	pres|p3|sg	4	aux	_	_
+6	.	.	_	sent	_	4	punct	_	_
+
+1	Әрбіреудің	әрбіреу	_	prn	ind|gen	0	_	_	_
+2	тілін	тіл	_	v	tv|pass|imp|p2|sg	3	advcl	_	_
+3	өнерін	өн	_	v	iv|ger_fut|px3sp|acc	0	_	_	_
+4	білген	біл	_	v	tv|gpr_past	0	_	_	_
+5	кісі	кісі	_	n	nom	0	_	_	_
+6	соныменен	*соныменен	_	unk	_	0	_	_	_
+7	бірдейлік	бірдейлік	_	n	nom	8	nmod:poss	_	_
+8	дағуасына	дағуа	_	n	px3sp|dat	9	nmod	_	_
+9	кіреді	кір	_	v	iv|aor|p3|sg	12	conj	_	_
+10	,	,	_	cm	_	12	punct	_	_
+11	аса	аса	_	adv	_	12	advmod	_	_
+12	арсыздана	арсыздан	_	v	iv|prc_impf	6	csubj	_	_
+13	жалынбайды	жалын	_	v	iv|neg|aor|p3|sg	6	csubj	_	_
+14	.	.	_	sent	_	6	punct	_	_
+
+1	Ел	ел	_	n	nom	0	_	_	_
+2	1955	1955	_	num	_	3	amod	_	_
+3	ж.	ж.	_	abbr	_	0	_	_	_
+4	АҚШ-пен	АҚШ	_	np	top|ins	14	nmod	_	_
+5	әскери	әскери	_	adj	_	6	amod	_	_
+6	келісімдер	келісім	_	n	pl|nom	14	subj	_	_
+7	жасасты	жаса	_	v	tv|coop|ifi|p3|sg	11	conj	_	_
+8	,	,	_	cm	_	11	punct	_	_
+9	1960	1960	_	num	_	10	amod	_	_
+10	жылдан	жыл	_	n	abl	11	nmod	_	_
+11	бастап	баста	_	v	tv|gna_perf	14	advcl	_	_
+12	Батыс	батыс	_	adj	_	13	amod	_	_
+13	үлгісінде	үлгі	_	n	px3sp|loc	14	nmod	_	_
+14	дами	дамы	_	v	iv|prc_impf	3	csubj	_	_
+15	бастады	баста	_	vaux	ifi|p3|sg	3	aux	_	_
+16	.	.	_	sent	_	3	punct	_	_
+
+1	Осы себептен	осы себептен	_	cnjadv	_	4	cc	_	_
+2	олар	ол	_	prn	dem|pl|nom	4	nmod	_	_
+3	далада	дала	_	n	loc	4	nmod	_	_
+4	ойнай	ойна	_	v	tv|prc_impf	0	root	_	_
+5	алмады	ал	_	vaux	neg|ifi|p3|sg	4	aux	_	_
+6	.	.	_	sent	_	4	punct	_	_
+
+1	Қазаққа	қазақ	_	adj	subst|dat	22	subj	_	_
+2	күзетші	күзетші	_	n	nom	4	obj	_	_
+3	болайын	бол	_	v	iv|opt|p1|sg	2	cop	_	_
+4	деп	де	_	v	tv|gna_perf	22	advcl	_	_
+5	,	,	_	cm	_	4	punct	_	_
+6	біз де	біз	_	prn	pers|p1|pl|nom	22	subj	_	_
+7	біз де	да	_	cnjcoo	_	22	cc	_	_
+8	ел	ел	_	n	nom	12	subj	_	_
+9	болып	бол	_	v	iv|gna_perf	8	cop	_	_
+10	,	,	_	cm	_	8	punct	_	_
+11	жұрт	жұрт	_	n	nom	12	obj	_	_
+12	білгенді	біл	_	v	tv|ger_past|acc	13	advcl	_	_
+13	біліп	біл	_	v	tv|gna_perf	22	advcl	_	_
+14	,	,	_	cm	_	13	punct	_	_
+15	жұрт	жұрт	_	n	nom	16	subj	_	_
+16	қатарына	қат	_	v	iv|ger_fut|px3sp|dat	17	advcl	_	_
+17	қосылудың	қос	_	v	tv|pass|ger|gen	18	acl	_	_
+18	қамын	қам	_	n	px3sp|acc	19	obj	_	_
+19	жейік	же	_	v	tv|opt|p1|pl	20	advcl	_	_
+20	деп	де	_	v	tv|gna_perf	21	ccomp	_	_
+21	ниеттеніп	ниеттен	_	v	iv|gna_perf	22	advcl	_	_
+22	үйрену	үйрен	_	v	tv|ger|nom	23	advcl	_	_
+23	керек	керек	_	adj	_	0	root	_	_
+24	керек	е	_	cop	aor|p3|sg	23	cop	_	_
+25	.	.	_	sent	_	23	punct	_	_
+
+1	Аның	*Аның	_	unk	_	6	punct	_	_
+2	үшін	үшін	_	post	_	1	case	_	_
+3	олар	ол	_	prn	dem|pl|nom	6	subj	_	_
+4	дүниенің	дүние	_	n	gen	5	nmod:poss	_	_
+5	тілін	тіл	_	n	px3sp|acc	6	obj	_	_
+6	білді	біл	_	v	tv|ifi|p3|sg	9	parataxis	_	_
+7	,	,	_	cm	_	6	punct	_	_
+8	мұндай	бұл	_	prn	dem|sim|nom	9	nmod	_	_
+9	болды	бол	_	v	iv|ifi|p3|sg	0	root	_	_
+10	.	.	_	sent	_	9	punct	_	_
+
+1	Әр	әр	_	det	qnt	2	det	_	_
+2	адам	адам	_	n	nom	4	nmod:poss	_	_
+3	,	,	_	cm	_	2	punct	_	_
+4	нәсіліне	нәсіл	_	n	px3sp|dat	6	nmod	_	_
+5	,	,	_	cm	_	4	punct	_	_
+6	түр-түсіне	түр-түс	_	n	px3sp|dat	8	nmod	_	_
+7	,	,	_	cm	_	6	punct	_	_
+8	жынысына	жыныс	_	n	px3sp|dat	10	nmod	_	_
+9	,	,	_	cm	_	8	punct	_	_
+10	тіліне	тіл	_	n	px3sp|dat	12	nmod	_	_
+11	,	,	_	cm	_	10	punct	_	_
+12	дініне	дін	_	n	px3sp|dat	0	_	_	_
+13	,	,	_	cm	_	12	punct	_	_
+14	саяси	саяси	_	adj	_	16	conj	_	_
+15	немесе	немесе	_	cnjcoo	_	16	cc	_	_
+16	басқа да	басқа	_	adj	_	18	amod	_	_
+17	басқа да	да	_	cnjcoo	_	18	cc	_	_
+18	наным-сенімдеріне	наным-сенім	_	n	pl|px3sp|dat	0	_	_	_
+19	,	,	_	cm	_	0	_	_	_
+20	ұлттық	ұлттық	_	adj	_	0	_	_	_
+21	,	,	_	cm	_	0	_	_	_
+22	немесе	немесе	_	cnjcoo	_	0	_	_	_
+23	әлеуметтік	әлеуметтік	_	adj	_	24	amod	_	_
+24	тегіне	тек	_	n	px3sp|dat	0	_	_	_
+25	,	,	_	cm	_	0	_	_	_
+26	мүліктік	мүліктік	_	adj	_	0	_	_	_
+27	,	,	_	cm	_	0	_	_	_
+28	тектік-топтық	тектік-топтық	_	adj	_	0	_	_	_
+29	,	,	_	cm	_	0	_	_	_
+30	немесе	немесе	_	cnjcoo	_	0	_	_	_
+31	басқа да	басқа	_	adj	_	33	amod	_	_
+32	басқа да	да	_	cnjcoo	_	33	cc	_	_
+33	жағдаяттарға	жағдаят	_	n	pl|dat	37	nmod	_	_
+34	қарамастан	қарамастан	_	post	_	33	case	_	_
+35	осы	осы	_	det	dem	36	det	_	_
+36	Декларацияда	декларация	_	n	loc	37	nmod	_	_
+37	жарияланған	жарияла	_	v	tv|pass|gpr_past	0	_	_	_
+38	барлық	барлық	_	adj	_	39	amod	_	_
+39	құқықтар	құқық	_	n	pl|nom	41	conj	_	_
+40	мен	мен	_	cnjcoo	_	41	cc	_	_
+41	бостандықтарға	бостандық	_	n	pl|dat	42	nmod	_	_
+42	алаланбай	алала	_	v	tv|pass|neg|gna_perf	0	_	_	_
+43	,	,	_	cm	_	42	punct	_	_
+44	бірдей	бір	_	num	subst|sim	0	_	_	_
+45	тең	тең	_	adj	_	47	subj	_	_
+46	ие болуы	ие бол	_	v	iv|ger|px3sp|nom	45	csubj	_	_
+47	тиіс	тиіс	_	adj	_	0	_	_	_
+48	.	.	_	sent	_	47	punct	_	_
+
+1	Ал	ал	_	cnjcoo	_	6	cc	_	_
+2	Азамат	Азамат	_	np	ant|m|nom	6	subj	_	_
+3	ағаштың	ағаш	_	n	gen	4	nmod:poss	_	_
+4	жанында	жан	_	n	px3sp|loc	6	nmod	_	_
+5	не	не	_	cnjcoo	_	6	cc	_	_
+6	істеп	істе	_	v	iv|prc_perf	0	root	_	_
+7	жатыр	жатыр	_	vaux	imp|p2|sg	6	aux	_	_
+8	?	?	_	sent	_	6	punct	_	_
+
+1	Бірақ	бірақ	_	cnjcoo	_	0	_	_	_
+2	Сасани	*Сасани	_	unk	_	0	_	_	_
+3	әулеті	әулет	_	n	px3sp|nom	4	nmod:poss	_	_
+4	мемлекеті	мемлекет	_	n	px3sp|nom	7	subj	_	_
+5	арабтардың	араб	_	n	pl|gen	6	nmod:poss	_	_
+6	шабуылынан	шабуыл	_	n	px3sp|abl	7	nmod	_	_
+7	құлап	құла	_	v	iv|gna_perf	0	_	_	_
+8	,	,	_	cm	_	7	punct	_	_
+9	7	7	_	num	_	10	amod	_	_
+10	ғасырдың	ғасыр	_	n	gen	0	_	_	_
+11	2	2	_	num	_	0	_	_	_
+12	-	-	_	guio	_	0	_	_	_
+13	жартысында	жарты	_	n	px3sp|loc	18	nmod	_	_
+14	Иран	Иран	_	np	top|nom	18	subj	_	_
+15	Араб	араб	_	n	nom	16	nmod:poss	_	_
+16	халифаты	халифат	_	n	px3sp|nom	17	nmod:poss	_	_
+17	құрамына	құрам	_	n	px3sp|dat	18	nmod	_	_
+18	қосылды	қос	_	v	tv|pass|ifi|p3|sg	12	csubj	_	_
+19	.	.	_	sent	_	12	punct	_	_
+
+1	Ол	ол	_	prn	pers|p3|sg|nom	4	subj	_	_
+2	не	не	_	prn	itg|nom	4	subj	_	_
+3	үшін	үшін	_	post	_	2	case	_	_
+4	бүйтіп	бүйт	_	v	iv|prc_perf	0	root	_	_
+5	жатыр	жатыр	_	vaux	imp|p2|sg	4	aux	_	_
+6	?	?	_	sent	_	4	punct	_	_
+
+1	Ол	ол	_	prn	pers|p3|sg|nom	0	_	_	_
+2	"	"	_	sent	_	0	_	_	_
+3	Азамат	Азамат	_	np	ant|m|nom	6	subj	_	_
+4	қай	қай	_	det	itg	5	det	_	_
+5	жерге	жер	_	n	dat	6	nmod	_	_
+6	кетті	кет	_	v	iv|ifi|p3|sg	14	parataxis	_	_
+7	?	?	_	sent	_	6	punct	_	_
+8	Оны	ол	_	prn	dem|acc	9	obj	_	_
+9	көрдіңдер ме	көр	_	v	tv|ifi|p2|pl	13	ccomp	_	_
+10	көрдіңдер ме	ма	_	qst	_	9	disc	_	_
+11	?	?	_	sent	_	9	punct	_	_
+12	"	"	_	sent	_	9	punct	_	_
+13	деп	де	_	v	tv|prc_perf	14	advcl	_	_
+14	іздеп	ізде	_	v	tv|prc_perf	2	csubj	_	_
+15	жатыр	жатыр	_	vaux	imp|p2|sg	2	aux	_	_
+16	.	.	_	sent	_	2	punct	_	_
+
+1	1953	1953	_	num	_	2	amod	_	_
+2	ж.	ж.	_	abbr	_	0	_	_	_
+3	ел	ел	_	n	nom	4	nmod:poss	_	_
+4	тәуелсіздігін	тәуелсіздік	_	n	px3sp|acc	5	obj	_	_
+5	күшейтуге	күшейт	_	v	tv|ger|dat	6	advcl	_	_
+6	тырысқан	тырыс	_	v	iv|gpr_past	0	_	_	_
+7	М	м	_	abbr	_	0	_	_	_
+8	.	.	_	sent	_	0	_	_	_
+9	Мосаддық	*Мосаддық	_	unk	_	0	_	_	_
+10	үкіметі	үкімет	_	n	px3sp|nom	11	subj	_	_
+11	құлатылды	құлат	_	v	tv|pass|ifi|p3|sg	9	csubj	_	_
+12	.	.	_	sent	_	9	punct	_	_
+
+1	Орыстың	орыс	_	n	gen	2	nmod:poss	_	_
+2	ғылымы	ғылым	_	n	px3sp|nom	0	_	_	_
+3	,	,	_	cm	_	0	_	_	_
+4	өнері	өн	_	v	iv|ger_fut|px3sp|nom	0	_	_	_
+5	—	—	_	guio	_	4	punct	_	_
+6	дүниенің	дүние	_	n	gen	7	nmod:poss	_	_
+7	кілті	кілт	_	n	px3sp|nom	0	_	_	_
+8	,	,	_	cm	_	0	_	_	_
+9	оны	ол	_	prn	dem|acc	10	obj	_	_
+10	білгенге	біл	_	v	tv|ger_past|dat	0	_	_	_
+11	дүние	дүние	_	n	nom	0	_	_	_
+12	арзанырақ	арзан	_	adj	comp|advl	0	_	_	_
+13	түседі	түс	_	v	iv|aor|p3|sg	0	_	_	_
+14	.	.	_	sent	_	0	_	_	_
+
+1	Сонда	сол	_	prn	dem|loc	0	_	_	_
+2	Қожа	Қожа	_	np	ant|m|nom	0	_	_	_
+3	:	:	_	sent	_	0	_	_	_
+4	-	-	_	guio	_	5	punct	_	_
+5	Сен	сен	_	prn	pers|p2|sg|nom	7	subj	_	_
+6	кісіні	кісі	_	n	acc	7	obj	_	_
+7	сыйламайды екенсің	сыйла	_	v	tv|neg|aor|evid|p2|sg	20	conj	_	_
+8	,	,	_	cm	_	20	punct	_	_
+9	киімді	киім	_	n	acc	10	obj	_	_
+10	сыйлайды екенсің	сыйла	_	v	tv|aor|evid|p2|sg	20	advcl	_	_
+11	.	.	_	sent	_	10	punct	_	_
+12	Сондықтан	сондықтан	_	cnjadv	_	18	cc	_	_
+13	шапаныма	шапан	_	n	px1sg|dat	14	nmod	_	_
+14	жегізіп	жегіз	_	v	tv|prc_perf	18	ccomp	_	_
+15	отырғаным	отыр	_	vaux	ger_past|px1sg|nom	14	aux	_	_
+16	!	!	_	sent	_	14	punct	_	_
+17	-	-	_	guio	_	14	punct	_	_
+18	деп	де	_	v	tv|gna_perf	20	advcl	_	_
+19	,	,	_	cm	_	18	punct	_	_
+20	жауап береді	жауап бер	_	v	iv|aor|p3|sg	3	csubj	_	_
+21	.	.	_	sent	_	3	punct	_	_
+
+1	1979	1979	_	num	_	2	amod	_	_
+2	ж.	ж.	_	abbr	_	4	nmod	_	_
+3	11	11	_	num	_	4	amod	_	_
+4	ақпанда	ақпан	_	n	loc	5	nmod	_	_
+5	болған	бол	_	v	iv|gpr_past	7	acl	_	_
+6	революция	революция	_	n	nom	7	nmod:poss	_	_
+7	нәтижесінде	нәтиже	_	n	px3sp|loc	10	nmod	_	_
+8	шаһ	шаһ	_	n	nom	9	nmod:poss	_	_
+9	үкіметі	үкімет	_	n	px3sp|nom	10	subj	_	_
+10	құлап	құла	_	v	iv|gna_perf	18	advcl	_	_
+11	,	,	_	cm	_	10	punct	_	_
+12	1	1	_	num	_	13	amod	_	_
+13	сәуірден	сәуір	_	n	abl	14	nmod	_	_
+14	бастап	баста	_	v	tv|gna_perf	18	advcl	_	_
+15	Иран	Иран	_	np	top|nom	18	subj	_	_
+16	Ислам	Ислам	_	n	nom	17	nmod:poss	_	_
+17	Республикасы	республика	_	n	px3sp|nom	18	subj	_	_
+18	жарияланды	жарияла	_	v	tv|pass|ifi|p3|sg	0	root	_	_
+19	.	.	_	sent	_	18	punct	_	_
+
+1	Астанаға	астана	_	n	dat	2	nmod	_	_
+2	баратын	бар	_	v	iv|gpr_impf	3	acl	_	_
+3	пойыз	пойыз	_	n	nom	4	subj	_	_
+4	қайда	қайда	_	adv	itg	0	root	_	_
+5	қайда	е	_	cop	aor|p3|sg	4	cop	_	_
+6	?	?	_	sent	_	4	punct	_	_
+
+1	Күшік	күшік	_	n	nom	4	subj	_	_
+2	балалармен	бала	_	n	pl|ins	3	nmod	_	_
+3	ойнағанды	ойна	_	v	tv|ger_past|acc	4	advcl	_	_
+4	жақсы көреді	жақсы көр	_	v	tv|aor|p3|sg	0	root	_	_
+5	.	.	_	sent	_	4	punct	_	_
+
+1	Иран	иран	_	n	nom	2	nmod:poss	_	_
+2	аумағы	аумақ	_	n	px3sp|nom	19	subj	_	_
+3	ұзақ	ұзақ	_	adj	_	4	amod	_	_
+4	жылдар	жыл	_	n	pl|nom	19	subj	_	_
+5	бойы	бойы	_	post	_	4	case	_	_
+6	Аббас	Аббас	_	np	ant|m|nom	19	subj	_	_
+7	әулеті	әулет	_	n	px3sp|nom	19	nmod	_	_
+8	билеген	биле	_	v	iv|gpr_past	10	acl	_	_
+9	Бағдад	Бағдад	_	np	top|attr	10	nmod:poss	_	_
+10	халифаты	халифат	_	n	px3sp|nom	11	nmod:poss	_	_
+11	құрамында	құрам	_	n	px3sp|loc	12	nmod	_	_
+12	болып	бол	_	v	iv|gna_perf	19	advcl	_	_
+13	,	,	_	cm	_	12	punct	_	_
+14	мәдени	мәдени	_	adj	_	16	conj	_	_
+15	және	және	_	cnjcoo	_	16	cc	_	_
+16	экономикалық	экономикалық	_	adj	_	18	amod	_	_
+17	дамуды	дамы	_	v	iv|ger|acc	16	cop	_	_
+18	басынан	бас	_	n	px3sp|abl	19	nmod	_	_
+19	кешірді	кешір	_	v	tv|ifi|p3|sg	0	root	_	_
+20	.	.	_	sent	_	19	punct	_	_
+
+1	Ұлттық	ұлттық	_	adj	_	2	amod	_	_
+2	табыс	табыс	_	n	nom	4	subj	_	_
+3	75	75	_	num	_	4	nummod	_	_
+4	млрд	млрд	_	n	nom	0	_	_	_
+5	млрд	е	_	cop	aor|p3|sg	4	cop	_	_
+6	.	.	_	sent	_	4	punct	_	_
+7	АҚШ	АҚШ	_	np	top|nom	0	_	_	_
+8	доллар	доллар	_	n	nom	9	nmod:poss	_	_
+9	көлемінде	көлем	_	n	px3sp|loc	0	_	_	_
+10	,	,	_	cm	_	0	_	_	_
+11	жан басына	жан бас	_	n	dat	12	nmod	_	_
+12	шаққанда	шақ	_	v	tv|ger_past|loc	0	_	_	_
+13	—	—	_	guio	_	12	punct	_	_
+14	1250	1250	_	num	_	15	nummod	_	_
+15	долл	*долл	_	unk	_	0	_	_	_
+16	.	.	_	sent	_	15	punct	_	_
+17	шамасында	шама	_	n	px3sp|loc	0	_	_	_
+18	шамасында	е	_	cop	aor|p3|sg	17	cop	_	_
+19	.	.	_	sent	_	17	punct	_	_
+
+1	Елде	ел	_	n	loc	7	nmod	_	_
+2	ағылшын	ағылшын	_	adj	_	3	amod	_	_
+3	үстемдігіне	үстемдік	_	n	px3sp|dat	7	nmod	_	_
+4	қарсы	қарсы	_	post	_	3	case	_	_
+5	жаңа	жаңа	_	adj	_	6	amod	_	_
+6	толқулар	толқу	_	n	pl|nom	7	subj	_	_
+7	басталды	баста	_	v	tv|pass|ifi|p3|sg	0	root	_	_
+8	.	.	_	sent	_	7	punct	_	_
+
+1	Айгүл	Айгүл	_	np	ant|f|nom	0	_	_	_
+2	бақшаның	бақша	_	n	gen	3	nmod:poss	_	_
+3	ішінде	іш	_	n	px3sp|loc	0	_	_	_
+4	ақырын	ақырын	_	adj	advl	0	_	_	_
+5	басып	бас	_	v	iv|prc_perf	0	_	_	_
+6	жүр	жүр	_	vaux	pres|p3|sg	5	aux	_	_
+7	.	.	_	sent	_	5	punct	_	_
+
+1	Астанаға	астана	_	n	dat	4	nmod	_	_
+2	бір	бір	_	num	_	3	nummod	_	_
+3	билет	билет	_	n	nom	4	obj	_	_
+4	беріңіз	бер	_	v	tv|imp|p2|frm|sg	0	root	_	_
+5	.	.	_	sent	_	4	punct	_	_
+
+1	Непал	Непал	_	np	top|nom	5	obj	_	_
+2	мен	мен	_	prn	pers|p1|sg|nom	5	subj	_	_
+3	Тибетке	Тибет	_	np	top|dat	5	nmod	_	_
+4	бет	бет	_	n	nom	5	obj	_	_
+5	алды	ал	_	v	tv|ifi|p3|sg	0	root	_	_
+6	.	.	_	sent	_	5	punct	_	_
+
+1	Ұлы	ұлы	_	adj	_	2	amod	_	_
+2	Отан	отан	_	n	nom	3	nmod:poss	_	_
+3	соғысында	соғыс	_	n	px3sp|loc	5	nmod	_	_
+4	ерлікпен	ерлік	_	n	ins	5	nmod	_	_
+5	қаза тапқан	қаза тап	_	v	iv|past|p3|sg	0	root	_	_
+6	.	.	_	sent	_	5	punct	_	_
+
+1	Бір	бір	_	num	_	2	nummod	_	_
+2	күні	күн	_	n	px3sp|nom	11	subj	_	_
+3	кешке	кеш	_	adj	subst|dat	5	nummod	_	_
+4	жақын	жақын	_	post	_	3	case	_	_
+5	кемпірі	кемпір	_	n	px3sp|nom	6	nmod:poss	_	_
+6	төсегінен	төсек	_	n	px3sp|abl	7	nmod	_	_
+7	тұрып	тұр	_	v	iv|gna_perf	11	advcl	_	_
+8	,	,	_	cm	_	7	punct	_	_
+9	үйінің	үй	_	n	px3sp|gen	10	nmod:poss	_	_
+10	түндігін	түндік	_	n	px3sp|acc	11	obj	_	_
+11	ашады	аш	_	v	tv|aor|p3|sg	0	root	_	_
+12	.	.	_	sent	_	11	punct	_	_
+
+1	Олардың	ол	_	prn	dem|pl|gen	2	nmod:poss	_	_
+2	анасы	ана	_	n	px3sp|nom	3	nmod:poss	_	_
+3	мысығымен	мысық	_	n	px3sp|ins	0	_	_	_
+4	бірге	бір	_	num	subst|dat	5	conj	_	_
+5	үйде	үй	_	n	loc	0	_	_	_
+6	,	,	_	cm	_	5	punct	_	_
+7	ол	ол	_	prn	pers|p3|sg|nom	0	_	_	_
+8	терезеден	терезе	_	n	abl	0	_	_	_
+9	Азамат	Азамат	_	np	ant|m|nom	13	subj	_	_
+10	пен	мен	_	cnjcoo	_	13	cc	_	_
+11	Айгүлдің	Айгүл	_	np	ant|f|gen	13	subj	_	_
+12	ойнағанына	ойна	_	v	tv|ger_past|px3sp|dat	13	advcl	_	_
+13	қарап	қара	_	v	tv|prc_perf	0	_	_	_
+14	тұр	тұр	_	vaux	pres|p3|sg	13	aux	_	_
+15	.	.	_	sent	_	13	punct	_	_
+
+1	Сізде	сіз	_	prn	pers|p2|sg|mf|nom|loc	3	nmod	_	_
+2	сейф	сейф	_	n	nom	3	subj	_	_
+3	бар ма	бар	_	n	nom	0	root	_	_
+4	бар ма	е	_	cop	aor|p3|sg	3	cop	_	_
+5	бар ма	ма	_	qst	_	3	disc	_	_
+6	?	?	_	sent	_	3	punct	_	_
+
+1	Пантомима	пантомима	_	n	nom	7	subj	_	_
+2	,	,	_	cm	_	1	punct	_	_
+3	көлеңке	көлеңке	_	n	nom	5	conj	_	_
+4	және	және	_	cnjcoo	_	5	cc	_	_
+5	қуыршақ	қуыршақ	_	n	nom	6	nmod:poss	_	_
+6	театрлары	театр	_	n	pl|px3sp|nom	7	subj	_	_
+7	болған	бол	_	v	iv|past|p3|sg	0	root	_	_
+8	.	.	_	sent	_	7	punct	_	_
+
+1	Жер	жер	_	n	nom	2	nmod:poss	_	_
+2	беті	бет	_	n	px3sp|nom	3	nmod:poss	_	_
+3	суы	су	_	n	px3sp|nom	0	_	_	_
+4	аз	аз	_	adj	_	0	_	_	_
+5	.	.	_	sent	_	0	_	_	_
+
+1	Сонымен қатар	сонымен қатар	_	adv	_	0	_	_	_
+2	,	,	_	cm	_	1	punct	_	_
+3	ешкім де	ешкім	_	prn	neg|nom	0	_	_	_
+4	ешкім де	да	_	cnjcoo	_	0	_	_	_
+5	өзі	өз	_	prn	ref|px3sp|nom	0	_	_	_
+6	тұратын	тұратын	_	adj	subst|nom	7	nmod:poss	_	_
+7	елінің	ел	_	n	px3sp|gen	0	_	_	_
+8	,	,	_	cm	_	7	punct	_	_
+9	не	не	_	cnjcoo	_	0	_	_	_
+10	болмаса	болмаса	_	cnjcoo	_	11	cc	_	_
+11	территорияның	территория	_	n	gen	0	_	_	_
+12	саяси	саяси	_	adj	_	0	_	_	_
+13	,	,	_	cm	_	0	_	_	_
+14	құқықтық	құқықтық	_	n	nom	0	_	_	_
+15	,	,	_	cm	_	0	_	_	_
+16	немесе	немесе	_	cnjcoo	_	0	_	_	_
+17	халықаралық	халықаралық	_	adj	_	18	amod	_	_
+18	мәртебесінің	мәртебе	_	n	px3sp|gen	0	_	_	_
+19	негізі	негізі	_	adv	_	0	_	_	_
+20	бойынша	бойынша	_	post	_	19	case	_	_
+21	,	,	_	cm	_	19	punct	_	_
+22	және де	және	_	cnjcoo	_	23	cc	_	_
+23	және де	да	_	cnjcoo	_	24	cc	_	_
+24	ол	ол	_	prn	pers|p3|sg|nom	0	_	_	_
+25	территория	территория	_	n	nom	0	_	_	_
+26	тәуелсіз	тәуелсіз	_	adj	_	52	subj	_	_
+27	,	,	_	cm	_	51	punct	_	_
+28	әлде	әл	_	n	loc	51	nmod	_	_
+29	біреудің	біреу	_	prn	ind|gen	33	nmod:poss	_	_
+30	қарамағында	қарамағында	_	post	_	29	case	_	_
+31	,	,	_	cm	_	29	punct	_	_
+32	әлде	әл	_	n	loc	33	nmod:poss	_	_
+33	өзін	өз	_	prn	ref|px3sp|acc	35	nmod:poss	_	_
+34	-	-	_	guio	_	33	punct	_	_
+35	өзі	өз	_	prn	ref|px3sp|nom	51	subj	_	_
+36	басқарушы	басқар	_	v	tv|gpr_pot	51	conj	_	_
+37	емес	е	_	cop	neg|aor|p3|sg	50	conj	_	_
+38	,	,	_	cm	_	37	punct	_	_
+39	немесе	немесе	_	cnjcoo	_	50	cc	_	_
+40	оның	ол	_	prn	pers|p3|sg|gen	41	nmod:poss	_	_
+41	егемендігі	егемендік	_	n	px3sp|nom	47	subj	_	_
+42	әртүрлі	әртүрлі	_	det	qnt	43	det	_	_
+43	нысанда	нысан	_	n	loc	47	subj	_	_
+44	шектеулі	шектеулі	_	adj	_	46	amod	_	_
+45	болған	бол	_	v	iv|gpr_past	44	cop	_	_
+46	күннің	күн	_	n	gen	47	subj	_	_
+47	өзінде де	өз	_	prn	ref|px3sp|loc	50	conj	_	_
+48	өзінде де	е	_	cop	aor|p3|sg	47	cop	_	_
+49	өзінде де	да	_	cnjcoo	_	50	cc	_	_
+50	,	,	_	cm	_	51	punct	_	_
+51	алаланбауы	алала	_	v	tv|pass|neg|ger|px3sp|nom	26	csubj	_	_
+52	тиіс	тиіс	_	adj	_	0	_	_	_
+53	.	.	_	sent	_	52	punct	_	_
+
+1	Ешкімді де	ешкі	_	n	px1sg|acc	5	conj	_	_
+2	Ешкімді де	да	_	cnjcoo	_	5	cc	_	_
+3	белгілі	белгілі	_	adj	_	5	amod	_	_
+4	бір	бір	_	num	_	5	nummod	_	_
+5	ассоциацияға	ассоциация	_	n	dat	7	nmod	_	_
+6	зорлықпен	зорлық	_	n	ins	7	nmod	_	_
+7	кіргізуге	кіргіз	_	v	iv|ger|dat	8	ccomp	_	_
+8	болмайды	бол	_	v	iv|neg|aor|p3|sg	0	root	_	_
+9	.	.	_	sent	_	8	punct	_	_
+
+1	Ұсақ	ұсақ	_	adj	_	2	amod	_	_
+2	халықтар	халық	_	n	pl|nom	24	subj	_	_
+3	халықтар	е	_	cop	aor|p3|sg	2	cop	_	_
+4	(	(	_	lpar	_	15	punct	_	_
+5	ауғандар	Ауған	_	n	pl|nom	15	conj	_	_
+6	,	,	_	cm	_	15	punct	_	_
+7	түрікмендер	түрікмен	_	n	pl|nom	15	conj	_	_
+8	,	,	_	cm	_	15	punct	_	_
+9	Әзірбайжандар	Әзірбайжан	_	np	top|pl|nom	15	conj	_	_
+10	,	,	_	cm	_	15	punct	_	_
+11	күрдтер	күрд	_	n	pl|nom	15	conj	_	_
+12	,	,	_	cm	_	15	punct	_	_
+13	армян	армян	_	n	nom	15	conj	_	_
+14	,	,	_	cm	_	15	punct	_	_
+15	грузиндер	грузин	_	n	pl|nom	2	appos	_	_
+16	)	)	_	rpar	_	15	punct	_	_
+17	орталықтың	орталық	_	n	gen	18	nmod:poss	_	_
+18	езгісіне	езгі	_	n	px3sp|dat	24	nmod	_	_
+19	қарсы	қарсы	_	post	_	18	case	_	_
+20	жиі	жиі	_	adj	_	22	conj	_	_
+21	-	-	_	guio	_	22	punct	_	_
+22	жиі	жиі	_	adj	_	23	amod	_	_
+23	көтеріліс	көтеріліс	_	n	nom	24	obj	_	_
+24	жасап	жаса	_	v	tv|prc_perf	0	root	_	_
+25	тұрды	тұр	_	vaux	ifi|p3|sg	24	aux	_	_
+26	.	.	_	sent	_	24	punct	_	_
+
+1	19	19	_	num	_	2	amod	_	_
+2	ғасырдың	ғасыр	_	n	gen	3	nmod:poss	_	_
+3	аяғына	аяқ	_	n	px3sp|dat	9	nmod	_	_
+4	таман	таман	_	post	_	3	case	_	_
+5	Иран	Иран	_	np	top|nom	9	subj	_	_
+6	еуропалық	еуропалық	_	adj	_	7	amod	_	_
+7	мемлекеттердің	мемлекет	_	n	pl|gen	9	subj	_	_
+8	жартылай	жартылай	_	adv	_	9	advmod	_	_
+9	отарына	ота	_	v	iv|ger_fut|px3sp|dat	11	advcl	_	_
+10	айнала	айнал	_	v	iv|prc_impf	11	advcl	_	_
+11	бастады	баста	_	v	tv|ifi|p3|sg	0	root	_	_
+12	.	.	_	sent	_	11	punct	_	_
+
+1	Ешкім де	ешкі	_	n	px1sg|nom	7	subj	_	_
+2	Ешкім де	да	_	cnjcoo	_	6	cc	_	_
+3	құлдықта	құлдық	_	n	loc	6	nmod	_	_
+4	немесе	немесе	_	cnjcoo	_	6	cc	_	_
+5	кіріптарлықта	кіріптарлық	_	n	loc	6	nmod	_	_
+6	ұсталуы	ұста	_	v	tv|pass|ger|px3sp|nom	7	advcl	_	_
+7	тиіс	тиіс	_	adj	_	0	root	_	_
+8	емес	е	_	cop	neg|aor|p3|sg	7	cop	_	_
+9	.	.	_	sent	_	7	punct	_	_
+
+1	17	17	_	num	_	3	cmpnd	_	_
+2	—	—	_	guio	_	3	punct	_	_
+3	18	18	_	num	_	4	amod	_	_
+4	ғасырларда	ғасыр	_	n	pl|loc	7	nmod	_	_
+5	Иранның	Иран	_	np	top|gen	6	nmod:poss	_	_
+6	экономикасы	экономика	_	n	px3sp|nom	7	subj	_	_
+7	құлдырап	құлдыра	_	v	iv|gna_perf	11	advcl	_	_
+8	,	,	_	cm	_	7	punct	_	_
+9	халықтың	халық	_	n	gen	10	acl	_	_
+10	жағдайы	жағдай	_	n	px3sp|nom	11	subj	_	_
+11	нашарлап	нашарла	_	v	iv|prc_perf	0	root	_	_
+12	кетті	кет	_	vaux	ifi|p3|sg	11	aux	_	_
+13	.	.	_	sent	_	11	punct	_	_
+
