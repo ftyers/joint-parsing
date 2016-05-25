@@ -818,7 +818,7 @@ def get_span_id(b0):
     return last_id
 
 
-def morph_oracle(c):
+def morph_oracle(c, feats=None):
     """
     Returns the first analysis of buffer front as a list of tokens.
     In case of the training corpus, this is the correct analysis.
@@ -888,7 +888,6 @@ def c2s(c):
     TODO ASSUME: - tree represented by c.arcs is a valid tree (each token
                    in c.sentence was assigned a head)
     """
-    # fixme well it doesn't always get a head...
 
     # (setof Arc) -> (dictionaryof Integer:(tupleof Integer, String)
     def invert_arcs(arcs):
@@ -903,8 +902,7 @@ def c2s(c):
             pred_head = d2h_l[t.id][0]
         except KeyError:
             # pred_head = "_"
-            pred_head = 0  # fixme this is a dumb fix to make MaltParser happy in the few cases
-                           # make it a real fix
+            pred_head = 0
         return pred_head
 
     # Token -> String
@@ -1144,7 +1142,7 @@ def train_morph_classifier(training_path, development_path, classifier, paramete
     joblib.dump(clf, 'morph_model_for_%s.pkl' % (os.path.basename(training_path)))
     joblib.dump(vec, 'morph_vectorizer_for_%s.pkl' % (os.path.basename(training_path)))
 
-    def guide(c, feats):  # todo test guide function
+    def guide(c, feats):
         """
         Given a Configuration and a set of training features, disambiguate buffer
         front of this configuration and return a list of tokens that make up the
@@ -1271,7 +1269,7 @@ if __name__ == '__main__':
     else:
         print('Training the classifier...')
         # guide_function = train(args.train, args.development)
-        # fixme debugging the crazy decision tree -- make this the main function when cleaning up
+        # fixme make this the main function when cleaning up
         guide_function = train_with_classifier(args.train, args.development,
                                                # DecisionTreeClassifier(),
                                                # [{'criterion': ['gini'], 'splitter': ['random'], 'class_weight': [None]}],
@@ -1297,7 +1295,6 @@ if __name__ == '__main__':
                                                 'morph'])
 
     # todo leave one parsing function to work with all cases
-    # todo create a separate runner for joint_parsing in a different file
     # parse input file
     cwd = os.getcwd()
     counter = 1
