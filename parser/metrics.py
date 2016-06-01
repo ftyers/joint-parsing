@@ -60,3 +60,36 @@ def las(parsed, gold):
         return 0
     return len([t_pred for t_pred, t_gold in zip(parsed, gold) if t_pred.head == t_gold.head and
                 t_pred.deprel == t_gold.deprel]) / float(len(parsed))
+
+
+def get_wordform_dependencies(s):
+    """
+    Create a set of dependencies from a sentence.
+    Dependencies are tuples of (head.form, label, dependent.form)
+    """
+    deps = set([])
+    for token in s:
+        head_id = token.head - 1
+        head = s[head_id].form
+        deps.add((head, token.deprel, token.form))
+    return deps
+
+
+def wordform_las(parsed, gold):
+    """
+    Calculate labeled attachment score using word forms as reference.
+    In regular LAS, token ids are used to compare parsed dependencies
+    with the gold output. In the case where the number of tokens in
+    gold and parsed do not match, LAS cannot be calculated.
+    As a workaround, create a set of dependencies (head, label, dependent)
+    where head and dependent are word forms.
+    Return the number of dependencies that coincide for gold and parsed,
+    over the number of dependencies in gold.
+    """
+    if not parsed:
+        return 0
+    parsed_deps = get_wordform_dependencies(parsed)
+    gold_deps = get_wordform_dependencies(gold)
+    correct = len(parsed_deps.intersection(gold_deps))
+
+    return correct / len(gold)
