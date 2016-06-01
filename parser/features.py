@@ -9,8 +9,8 @@ def extract_features_eng(c, as_dict=False):
     :param as_dict: indicates whether the output should be a dictionary (to be
     consumed by DictVectorizer) or a list of 'feature_name=value'.
     """
-    # todo I'd rather have them as objects and properties. not essential though
-    # will comply with the format for now
+    # fixme part of speech features for Kazakh and others do not work
+    # because you use cpostag, and these have pos tags in postag
 
     def form_of_buffer_front():
         return c.sentence[c.buffer[0]].form
@@ -236,10 +236,30 @@ def extract_features_eng(c, as_dict=False):
                 ] + morph_features
     else:
         feature_dict = dict(zip(
-            ('b0.form', 'b0.pos', 's0.form', 's0.pos', 'b1.pos', 's1.pos', 'ld(b0).pos',
-             's0.pos b0.pos', 's0.pos b0.form', 's0.form b0.pos', 's0.form b0.form',
-             's0.lemma', 'b0.lemma', 'b1.form', 'b2.pos', 'b3.pos', 'rd(s0).deprel',
-             'ld(s0).deprel', 'rd(b0).deprel', 'ld(b0).deprel', 's0.deprel', 's0_head.form'),
+            (
+                'b0.form',
+                'b0.pos',
+                's0.form',
+                's0.pos',
+                'b1.pos',
+                's1.pos',
+                'ld(b0).pos',
+                's0.pos b0.pos',
+                's0.pos b0.form',
+                's0.form b0.pos',
+                's0.form b0.form',
+                's0.lemma',
+                'b0.lemma',
+                'b1.form',
+                'b2.pos',
+                'b3.pos',
+                'rd(s0).deprel',
+                'ld(s0).deprel',
+                'rd(b0).deprel',
+                'ld(b0).deprel',
+                's0.deprel',
+                's0_head.form'
+            ),
             (
                 form_of_buffer_front(),
                 pos_of_buffer_front(),

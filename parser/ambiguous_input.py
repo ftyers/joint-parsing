@@ -1,3 +1,7 @@
+"""
+This is an x-best runner, apparently. Do not share.
+"""
+
 from conllz import read_conllz
 from sdp import read_sentences, load_model, parse, s2conll, c2s, parse_with_feats
 from metrics import las

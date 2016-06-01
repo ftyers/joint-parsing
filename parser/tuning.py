@@ -6,9 +6,7 @@ from sdp import *
 from metrics import las
 import numpy
 import json
-from sklearn.feature_extraction import DictVectorizer
-from sklearn import grid_search
-from sklearn.metrics import classification_report
+from scripts.morph_precision import compare
 from sklearn.linear_model import SGDClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -76,6 +74,9 @@ def train_tagger():
     train = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/puupankki_ambig_train'
     dev = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/puupankki_ambig_dev'
     feature_set = json.load(open('/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/feature_config_full'))
+
+    tuvan = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/tuvan/puupankki.tyv.x-best.conllz'
+    crimean = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/crimean/puupankki.crh.x-best.conllz'
 
     classifiers = [
         SGDClassifier(),

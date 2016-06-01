@@ -37,7 +37,7 @@ for line in sys.stdin.readlines():  # {
             print('%d\t%s\t%s\t%s\t_\t%s' % (num, sur, analys[0], analys[1], analys[2]));
         # }
     else:  # {
-        print('WARNING: "%s" not found in dictionary.', file=sys.stderr);
+        print('WARNING: "%s" not found in dictionary.' % sur, file=sys.stderr);
         print('%d\t%s\t%s\t%s\t_\t%s' % (num, sur, lem, cat, cha));
     # }
 # }
