@@ -4,16 +4,23 @@ import json
 from sdp import *
 
 description = """
+Joint Syntactic and Morphological Parser
+
+This parser performs joint morphological and syntactic disambiguation.
+
+INPUT: file in CoNLL-U format (first 6 fields required)
+OUTPUT: file in CoNLL-U format with head and deprel fields filled in,
+best morphological analysis selected for ambiguous tokens.
+
+USAGE: python3 jdp.py <input_file> <output_file> -pm <parsing_model> -pvec <parsing_vectorizer>
+-pf <parsing_features> -tm <tagging_model> -tvec <tagging_vectorizer>
+-tf <tagging_features>
+
+Model and vectorizer files are obtained during model training.
+For more information, see README
+
 
 """
-# todo write description for the parser
-
-# a full set of features to use as a fallback
-FEATURES = [
-    'b0.form', 'b0.pos', 's0.form', 's0.pos', 'b1.pos', 's1.pos', 'ld(b0).pos', 's0.pos b0.pos', 's0.pos b0.form',
-    's0.form b0.pos', 's0.form b0.form', 's0.lemma', 'b0.lemma', 'b1.form', 'b2.pos', 'b3.pos', 'rd(s0).deprel',
-    'ld(s0).deprel', 'rd(b0).deprel', 'ld(b0).deprel', 's0.deprel', 's0_head.form'
-]
 
 
 class AbsPath(argparse.Action):
@@ -27,16 +34,22 @@ class AbsPath(argparse.Action):
 
 # runner
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=description)
+    parser = argparse.ArgumentParser(description=description, formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument('input_file', action=AbsPath)
     parser.add_argument('output_file', action=AbsPath)
-    parser.add_argument('-pm', '--parsing_model', action=AbsPath)
-    parser.add_argument('-pvec', '--parsing_vectorizer', action=AbsPath)
-    parser.add_argument('-tm', '--tagging_model', action=AbsPath)
-    parser.add_argument('-tvec', '--tagging_vectorizer', action=AbsPath)  # todo make everything required
-    parser.add_argument('-pf', '--parsing_features', action=AbsPath)
-    parser.add_argument('-tf', '--tagging_features', action=AbsPath)
+    parser.add_argument('-pm', '--parsing_model', action=AbsPath, required=True,
+                        help="path to the first file of the dependency parsing model")
+    parser.add_argument('-pvec', '--parsing_vectorizer', action=AbsPath, required=True,
+                        help="path to the vectorizer that goes with the dependency parsing model")
+    parser.add_argument('-tm', '--tagging_model', action=AbsPath, required=True,
+                        help="path to the first file of the morphological tagging model")
+    parser.add_argument('-tvec', '--tagging_vectorizer', action=AbsPath, required=True,
+                        help="path to the vectorizer that goes with the morphological tagging model")
+    parser.add_argument('-pf', '--parsing_features', action=AbsPath, required=True,
+                        help="path to feature config used in training the parsing model")
+    parser.add_argument('-tf', '--tagging_features', action=AbsPath, required=True,
+                        help="path to feature config used in training the tagging model")
 
     args = parser.parse_args()
     parsing_features = json.load(open(args.parsing_features))
