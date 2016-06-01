@@ -17,17 +17,14 @@ USAGE: python3 jdp.py <input_file> <output_file> -pm <parsing_model> -pvec <pars
 -tf <tagging_features>
 
 Model and vectorizer files are obtained during model training.
-For more information, see README
-
-
+For more information, see README.
 """
 
 
 class AbsPath(argparse.Action):
 
     def __call__(self, parser, namespace, path, option_string=None):
-        # cwd = os.getcwd()
-        cwd = os.path.dirname(os.path.realpath(__file__))  # use for debugging and config launches
+        cwd = os.getcwd()
         if not os.path.isabs(path):
             path = os.path.join(cwd, path)
         setattr(namespace, self.dest, path)
@@ -36,6 +33,7 @@ class AbsPath(argparse.Action):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=description, formatter_class=argparse.RawDescriptionHelpFormatter)
 
+    # resolve command-line arguments
     parser.add_argument('input_file', action=AbsPath)
     parser.add_argument('output_file', action=AbsPath)
     parser.add_argument('-pm', '--parsing_model', action=AbsPath, required=True,
@@ -69,6 +67,7 @@ if __name__ == '__main__':
     morph_guide_function = load_tagging_model(model_path, vec_path)
     print('done')
 
+    # begin parsing
     cwd = os.getcwd()
     counter = 1
     print('Parsing sentences...')
