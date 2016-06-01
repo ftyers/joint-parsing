@@ -21,21 +21,8 @@ from sklearn.metrics import classification_report
 from sklearn.externals import joblib
 from sklearn import grid_search
 
-description = """(ArcStandard Transition-based) Statistical Dependency Parser.
-
-INPUT: a file with to-be-parsed sentences in CoNLL06 format.
-OUTPUT: a file with parsed sentences in CoNLL06 format.
-
-Replaces 'head' and 'deprel' fields of input tokens with
-predicted head and label when writing them to output file.
-
-ASSUMES: 'id' fields of tokens in a sentence start counting
-         from 1 and are convertible to integers.
-
-USAGE: python3 sdp.py <training_file> <development_file> <input_file> <output_file>
-<path_to_model> <path_to_vectorizer>
-(also see acceptance-tests/T_* folders for different modes)
-UNIT TESTS: py.test sdp.py (py.test has to be installed)"""
+description = """Use jdp.py to launch joint parsing.
+This file should not be run independently."""
 
 # fixme changed signature silently, all tests will fail
 
