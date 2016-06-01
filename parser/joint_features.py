@@ -1,4 +1,4 @@
-def extract_features(c, config=None): # todo remove as_dict from the whole parser when cleaning up
+def extract_features(c, config=None):
     """
     Represent configuration as a feature vector.
     Assume the stack and the buffer front is always disambiguated.

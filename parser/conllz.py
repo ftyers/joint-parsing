@@ -316,8 +316,4 @@ def test_read_sentences():
 
 
 if __name__ == '__main__':
-    # test_read_sentences()
-    for i in read_conllz_for_joint('/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/allmorph_short'):
-        for token in i:
-            print(token)
-        print()
+    test_read_sentences()
