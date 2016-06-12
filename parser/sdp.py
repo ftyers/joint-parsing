@@ -340,6 +340,38 @@ def initialize_configuration_joint(s):
     return Configuration([0], [i for i in range(1, len(s))], s, set())
 
 
+def read_token(line):
+    """Parse a line of the file in CoNLL06 format and return a Token."""
+    token = line.strip().split('\t')
+    if len(token) == 6:
+        token += ['_', '_', '_', '_']
+    id, form, lemma, cpostag, postag, feats, head, deprel, phead, pdeprel = token
+    try:
+        head = int(head)
+    except ValueError:
+        head = '_'
+    try:
+        phead = int(phead)
+    except ValueError:
+        phead = '_'
+    return Token(int(id), form, lemma, cpostag, postag, feats, head, deprel, phead, pdeprel)
+
+
+# Filename -> (generator Sentence)
+def read_sentences(f):
+    """Return Sentences from a file in CoNLL06 format."""
+    with open(f, 'r') as conll_file:
+        s = [ROOT]
+        for line in conll_file:
+            if line.strip() and not line.startswith('#'):
+                s.append(read_token(line))
+            elif len(s) != 1:
+                yield s
+                s = [ROOT]
+        if len(s) != 1:  # file ended without a new line at the end
+            yield s
+
+
 # Sentence -> (setof Arc)
 def get_arcs(s):
     """Return arcs from a gold standard sentence s."""
