@@ -1,0 +1,51 @@
+from sdp import read_sentences
+from metrics import wordform_las
+
+def las(parsed, gold):
+    """
+    Calculate labeled attachment score for a given sentence
+    """
+    if len(parsed) != len(gold):
+        return None
+    if not parsed:
+        return 0
+    return len([t_pred for t_pred, t_gold in zip(parsed, gold) if t_pred.head == t_gold.head and
+                t_pred.deprel == t_gold.deprel]) / float(len(parsed))
+
+
+def get_las(parsed, gold):
+    gold_sentences = read_sentences(gold)
+    lasses = []
+
+    parsed_sentences = read_sentences(parsed)
+
+    for s in parsed_sentences:
+        gold_sentence = next(gold_sentences)
+
+        if len(s[1:]) == len(gold_sentence[1:]):
+            las_function = las
+        else:
+            las_function = wordform_las
+
+        lasses.append(las_function(s[1:], gold_sentence[1:]))
+
+    good_scores = [i for i in lasses if i is not None]
+    ignored = [str(i) for i in range(len(lasses)) if lasses[i] is None]
+
+    print('LAS: %.3f' % float(sum(good_scores)/len(good_scores)))
+    print('Ignored %d sentences:' % len(ignored))
+    print(', '.join(ignored))
+
+
+if __name__ == '__main__':
+
+    # gold = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/crimean/gold_nospan'
+    # parsed = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/results/joint_parsing/crimean'
+    #
+    # gold = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/results/joint_parsing/kazakh_gold'
+    # parsed = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/results/joint_parsing/kazakh_xbest'
+    #
+    gold = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/results/joint_parsing/tuvan_gold'
+    parsed = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/results/joint_parsing/tuvan'
+
+    get_las(parsed, gold)
