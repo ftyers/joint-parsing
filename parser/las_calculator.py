@@ -1,6 +1,20 @@
 import sys
-from sdp import read_sentences
 from metrics import wordform_las
+
+
+def read_sentences(f):
+    """Return Sentences from a file in CoNLL06 format."""
+    with open(f, 'r') as conll_file:
+        s = [ROOT]
+        for line in conll_file:
+            if line.strip() and not line.startswith('#'):
+                s.append(read_token(line))
+            elif len(s) != 1:
+                yield s
+                s = [ROOT]
+        if len(s) != 1:  # file ended without a new line at the end
+            yield s
+
 
 def las(parsed, gold):
     """
