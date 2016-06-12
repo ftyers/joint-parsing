@@ -39,13 +39,8 @@ def get_las(parsed, gold):
 
 if __name__ == '__main__':
 
-    # gold = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/crimean/gold_nospan'
-    # parsed = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/results/joint_parsing/crimean'
-    #
-    # gold = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/results/joint_parsing/kazakh_gold'
-    # parsed = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/results/joint_parsing/kazakh_xbest'
-    #
-    gold = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/results/joint_parsing/tuvan_gold'
-    parsed = '/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/results/joint_parsing/tuvan'
+    # specify paths to the gold corpus and the parsed corpus
+    gold = ''
+    parsed = ''
 
     get_las(parsed, gold)
