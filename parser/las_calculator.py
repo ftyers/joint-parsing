@@ -1,3 +1,4 @@
+import sys
 from sdp import read_sentences
 from metrics import wordform_las
 
@@ -39,8 +40,7 @@ def get_las(parsed, gold):
 
 if __name__ == '__main__':
 
-    # specify paths to the gold corpus and the parsed corpus
-    gold = ''
-    parsed = ''
+    gold = sys.argv[1]
+    parsed = sys.argv[2]
 
     get_las(parsed, gold)
