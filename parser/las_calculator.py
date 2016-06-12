@@ -1,6 +1,8 @@
 import sys
 from metrics import wordform_las
 
+ROOT = Token(0, 'ROOT', 'ROOT', 'ROOT', 'ROOT', 'ROOT', 0, 'ROOT', 0, 'ROOT')  # default for root node
+
 
 def read_sentences(f):
     """Return Sentences from a file in CoNLL06 format."""
