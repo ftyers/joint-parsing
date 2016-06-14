@@ -22,6 +22,12 @@ The parser depends on a few Python modules. They are listed in requirements.txt 
 - scipy
 - scikit-learn
 
+If you are using Debian, you will need to be on stretch and will need the following packages:
+
+- python-numpy (1:1.11.1~rc1-1)
+- python3-scipy (0.17.1-1)
+- python3-sklearn (0.17.1-2)
+
 ### Installation
 To install the parser, make sure that you have installed all the above requirements. Then clone this repository (or download and unzip the zip file) and navigate to the parser folder.
 ```
