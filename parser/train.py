@@ -3,6 +3,7 @@
 Trains a dependency parsing or a morphological tagging classifier
 on the provided training and development corpora.
 """
+import sys
 import argparse
 import json
 import numpy
@@ -29,7 +30,7 @@ USAGE:
 
 
 # Training functions
-def train_with_classifier(training_path, development_path, classifier, parameters, features):
+def train_with_classifier(training_path, development_path, classifier, parameters, features, outpath):
     """
     Train the dependency parsing model using the classifier and its parameters supplied.
     :param features: a set of features to use in this round of training
@@ -37,6 +38,7 @@ def train_with_classifier(training_path, development_path, classifier, parameter
     :param development_path: path to development corpus
     :param classifier: a sklearn classifier object
     :param parameters: a list of parameters to use for grid search
+    :param outpath: directory to output the model in
     """
 
     training_collection = []
@@ -83,9 +85,9 @@ def train_with_classifier(training_path, development_path, classifier, parameter
     print(clf.best_score_)
 
     # Save the model
-    joblib.dump(clf, 'model_for_%s.pkl' % (os.path.basename(training_path)))
-    joblib.dump(vec, 'vectorizer_for_%s.pkl' % (os.path.basename(training_path)))
-    print('Classifier files created in current directory.')
+    joblib.dump(clf, outpath + '/' + 'model_for_%s.pkl' % (os.path.basename(training_path)))
+    joblib.dump(vec, outpath + '/' + 'vectorizer_for_%s.pkl' % (os.path.basename(training_path)))
+    print('Classifier files created in %s.' % (outpath))
 
     # The same function will be created when the model loads from dump files.
     # No need to pass this anywhere. It remains from the times when training
@@ -103,7 +105,7 @@ def train_with_classifier(training_path, development_path, classifier, parameter
     return guide
 
 
-def train_morph_classifier(training_path, development_path, classifier, parameters, features):
+def train_morph_classifier(training_path, development_path, classifier, parameters, features, outpath):
     """
     Trains the morphological classifier.
     :param training_path: path to training corpus
@@ -158,9 +160,9 @@ def train_morph_classifier(training_path, development_path, classifier, paramete
     print('\t', end='')
     print(clf.best_params_)
 
-    joblib.dump(clf, 'morph_model_for_%s.pkl' % (os.path.basename(training_path)))
-    joblib.dump(vec, 'morph_vectorizer_for_%s.pkl' % (os.path.basename(training_path)))
-    print('Classifier files created in current directory.')
+    joblib.dump(clf, outpath + '/' + 'morph_model_for_%s.pkl' % (os.path.basename(training_path)))
+    joblib.dump(vec, outpath + '/' + 'morph_vectorizer_for_%s.pkl' % (os.path.basename(training_path)))
+    print('Classifier files created in %s.' % (outpath))
 
     def guide(c, feats):
         """
@@ -353,6 +355,8 @@ if __name__ == '__main__':
                         help="Path to the development corpus.")
     parser.add_argument('features', action=AbsPath,
                         help="Path to feature set file.")
+    parser.add_argument('output_path', action=AbsPath,
+                        help="Path to output the model to.")
     parser.add_argument('-m', '--morph', action='store_true',
                         help="A flag to train the morphological model.")
     parser.add_argument('-s', '--synt', action='store_true',
@@ -371,18 +375,24 @@ if __name__ == '__main__':
     parameters = {'criterion': ['gini'],
                   'splitter': ['best', 'random']}
 
+#    print(args.output_path, file=sys.stderr);
+
+    output_path = args.output_path 
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+
     if not args.morph and not args.synt:
         print('WARNING: mode not specified. Training the syntactic model.')
         print('Training the syntactic model...')
-        train_with_classifier(args.training_corpus, args.development_corpus, classifier, parameters, features)
+        train_with_classifier(args.training_corpus, args.development_corpus, classifier, parameters, features, output_path)
 
     elif args.morph:
         print('Training the morphological model...')
-        train_morph_classifier(args.training_corpus, args.development_corpus, classifier, parameters, features)
+        train_morph_classifier(args.training_corpus, args.development_corpus, classifier, parameters, features, output_path)
 
     elif args.synt:
         print('Training the syntactic model...')
-        train_with_classifier(args.training_corpus, args.development_corpus, classifier, parameters, features)
+        train_with_classifier(args.training_corpus, args.development_corpus, classifier, parameters, features, output_path)
 
     else:  # todo and if both? Should we allow to train both?
         pass
