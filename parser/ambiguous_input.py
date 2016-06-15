@@ -2,8 +2,10 @@
 This is an x-best runner, apparently. Do not share.
 """
 
+import sys
 from conllz import read_conllz
-from sdp import read_sentences, load_model, parse, s2conll, c2s, parse_with_feats
+from sdp import read_sentences, load_model, s2conll, c2s, joint_parse # parse, parse_with_feats
+
 from metrics import las
 
 
@@ -35,7 +37,9 @@ def run_experiment(gold_path, corpus_path, model, vector, output_path):
         # work with alternatives generated from one gold sentence
         current_sentence = next(ambiguous_sentences)
         while current_sentence is not None:
-            parsed = c2s(parse_with_feats(current_sentence, guide, feats))  # parse the sentence
+#def joint_parse(s, parsing_guide, parsing_feats, tagging_guide, tagging_feats):
+            #parsed = c2s(parse_with_feats(current_sentence, guide, feats))  # parse the sentence
+            parsed = c2s(joint_parse(current_sentence, guide, feats, '', ''))  # parse the sentence
             score = las(parsed, gold[1:])
             scored_sentences.append((score, parsed))
             current_sentence = next(ambiguous_sentences)
@@ -54,8 +58,8 @@ if __name__ == '__main__':
     run_experiment(
 
         # # crimean
-        gold_path='/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/crimean/puupankki.crh.conllu',
-        corpus_path='/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/crimean/puupankki.crh.x-best.conllz',
+        gold_path=sys.argv[1], #puupankki.crh.conllu',
+        corpus_path=sys.argv[2], #puupankki.crh.x-best.conllz',
 
         # tuvan
         # gold_path='/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/tuvan/puupankki.tyv.conllu',
@@ -65,10 +69,10 @@ if __name__ == '__main__':
         # gold_path='/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/puupankki.conllx_test',
         # corpus_path='/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/kazakh/xbest.conllz_test',
 
-        model='/Users/Sereni/PycharmProjects/Joint Parsing/parser/models/kazakh_DT/model_for_puupankki.conllx_train.pkl',
-        vector='/Users/Sereni/PycharmProjects/Joint Parsing/parser/models/kazakh_DT/vectorizer_for_puupankki.conllx_train.pkl',
+        model=sys.argv[3], #model_for_puupankki.conllx_train.pkl',
+        vector=sys.argv[4], #vectorizer_for_puupankki.conllx_train.pkl',
 
-        output_path='/Users/Sereni/PycharmProjects/Joint Parsing/parser/data/results/DT_experiments/crh_xbest_DT'
+        output_path=sys.argv[5] #crh_xbest_DT'
 
 
     )
